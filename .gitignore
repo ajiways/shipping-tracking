@@ -1,35 +1,11 @@
-# compiled output
-/dist
-/node_modules
+services/gateway/dist
+services/gateway/node_modules
 
-# Logs
-logs
-*.log
-npm-debug.log*
-pnpm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
+services/administration/dist
+services/administration/node_modules
 
-# OS
-.DS_Store
+services/notification/dist
+services/notification/node_modules
 
-# Tests
-/coverage
-/.nyc_output
-
-# IDEs and editors
-/.idea
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
-
-# IDE - VSCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+services/market/dist
+services/market/node_modules
