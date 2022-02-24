@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package nav_service;
+
+service NavigationService {
+  rpc transferStart(order)
+    returns (stream transferResponse);
+  rpc getOrder(orderRequest)
+    returns (orderResponse);
+}
+
+message order {
+  string id = 1;
+}
+
+message orderRequest {
+  string id = 1;
+}
+
+message orderResponse {
+  message obj {
+    int32 lat = 1;
+    int32 lng = 2;
+  }
+  obj end = 2;
+  obj start = 3;
+  string status = 1;
+}
+
+message transferResponse {
+  message obj {
+    int32 lat = 1;
+    int32 lng = 2;
+  }
+  obj coordinates = 1;
+  string count = 2;
+  obj end = 3;
+  obj start = 4;
+}

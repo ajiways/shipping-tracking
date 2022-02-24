@@ -1,0 +1,5 @@
+./services/ws-gateway/dist
+./services/ws-gateway/node_modules
+
+./services/nav-service/dist
+./services/nav-service/node_modules
