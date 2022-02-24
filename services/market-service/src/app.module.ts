@@ -1,13 +1,8 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { getOrmConfig } from './config/typeorm';
-import { OrderModule } from './modules/orders/order.module';
-import { ConfigModule } from '@nestjs/config'
+import { OrderModule } from './order.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
-    TypeOrmModule.forRoot(getOrmConfig()),
     OrderModule,
   ],
 })

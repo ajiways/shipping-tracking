@@ -1,15 +1,24 @@
 import { Controller } from '@nestjs/common';
-import { MessagePattern, Payload } from '@nestjs/microservices';
-import { IData } from './interfaces/data.interface';
-import { Order } from './order.entity';
+import { GrpcMethod } from '@nestjs/microservices';
+import { OrderDto } from './dto/order.dto';
 import { OrderService } from './order.service';
 
-@Controller('orders')
+@Controller()
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
-  @MessagePattern('market.orders')
-  async getOrderByUserId(@Payload() data: IData): Promise<Order[]> {
-    return this.orderService.fineByUserId(data.value);
+  @GrpcMethod('MarketService', 'CreateOrder')
+  async createOrder(data: OrderDto ) {
+    return this.orderService.createOrder(data)
+  }
+    
+  @GrpcMethod('MarketService', 'ChangeStatus')
+  async changeStatus(data: OrderDto ) {
+    return this.orderService.changeStatus(data)
+  }
+    
+  @GrpcMethod('MarketService', 'FindOrder')
+  async findOrder(data: OrderDto ) {
+    return this.orderService.findOrder(data)
   }
 }

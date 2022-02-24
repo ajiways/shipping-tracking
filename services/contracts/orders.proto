@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package market_service;
+
+service MarketService {
+  rpc CreateOrder (CreateOrderRequest)
+      returns (CreateOrderResponse);
+  rpc ChangeStatus (ChangeStatusRequest)
+      returns (ChangeStatusResponse);
+  rpc FindOrder (FindOrderRequest)
+      returns (FindOrderResponse);
+}
+
+message CreateOrderRequest {
+  message obj {
+    int32 lat = 1;
+    int32 lng = 2;
+  }
+  string orderId = 1;
+  string orderStatus = 2;
+  obj start = 3;
+  obj end = 4; 
+}
+
+message CreateOrderResponse {
+  string orderId = 1;
+}
+
+message ChangeStatusRequest {
+  string orderId = 1;
+  string orderStatus = 2;
+}
+
+message ChangeStatusResponse {
+  string orderId = 1;
+  string orderStatus = 2;
+}
+
+message FindOrderRequest {
+  string orderId = 1;
+}
+
+message FindOrderResponse {
+  message obj {
+    int32 lat = 1;
+    int32 lng = 2;
+  }
+  string orderId = 1;
+  string orderStatus = 2;
+  obj start = 3;
+  obj end = 4; 
+}
