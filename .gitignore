@@ -1,0 +1,8 @@
+services/maps/dist
+services/maps/node_modules
+
+service/generateClient/dist
+service/generateClient/node_modules
+
+service/Client/dist
+service/Client/node_modules
