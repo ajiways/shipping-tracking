@@ -12,14 +12,12 @@ service MarketService {
 }
 
 message CreateOrderRequest {
-  message obj {
-    int32 lat = 1;
-    int32 lng = 2;
-  }
   string orderId = 1;
   string orderStatus = 2;
-  obj start = 3;
-  obj end = 4; 
+  float startLat = 3;
+  float startLng = 4;
+  float endLat = 5;
+  float endLng = 6;
 }
 
 message CreateOrderResponse {
@@ -41,12 +39,10 @@ message FindOrderRequest {
 }
 
 message FindOrderResponse {
-  message obj {
-    int32 lat = 1;
-    int32 lng = 2;
-  }
   string orderId = 1;
   string orderStatus = 2;
-  obj start = 3;
-  obj end = 4; 
+  float startLat = 3;
+  float startLng = 4;
+  float endLat = 5;
+  float endLng = 6;
 }

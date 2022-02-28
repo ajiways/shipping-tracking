@@ -7,19 +7,11 @@ export enum OrderStatus {
   deliveredOrder = 'Заказ доставлен',
 }
 
-
 export interface CreateOrderRequest {  
-  orderStatus: OrderStatus;
-
-   start: {
-    lat: number,
-    lng: number,
-  };
-
-  end: {
-    lat: number,
-    lng: number,
-  };
+  startLat: number;
+  startLng: number;
+  endLat: number;
+  endLng: number;
 }
 
 export interface FindOrderRequest {
@@ -27,17 +19,10 @@ export interface FindOrderRequest {
 }
 
 export interface FindOrderResponse {
-  orderStatus: OrderStatus;
-
-  start: {
-   lat: number,
-   lng: number,
- };
-
- end: {
-   lat: number,
-   lng: number,
- };
+  startLat: number;
+  startLng: number;
+  endLat: number;
+  endLng: number;
 }
 
 export interface CreateOrderResponse {
@@ -55,7 +40,7 @@ export interface ChangeStatusResponse {
 }
 
 export interface MarketService {
-  createOrder(id: string, req: CreateOrderRequest): Observable<CreateOrderResponse>;
+  createOrder(req: CreateOrderRequest): Observable<CreateOrderResponse>;
   changeStatus(req: ChangeStatusRequest): Observable<ChangeStatusResponse>;
   findOrder(id: FindOrderRequest): Observable<FindOrderResponse>;
 }
