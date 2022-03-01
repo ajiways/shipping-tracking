@@ -12,7 +12,7 @@ service MarketService {
 }
 
 message CreateOrderRequest {
-  string orderId = 1;
+  string id = 1;
   string orderStatus = 2;
   float startLat = 3;
   float startLng = 4;
@@ -21,25 +21,25 @@ message CreateOrderRequest {
 }
 
 message CreateOrderResponse {
-  string orderId = 1;
+  string id = 1;
 }
 
 message ChangeStatusRequest {
-  string orderId = 1;
+  string id = 1;
   string orderStatus = 2;
 }
 
 message ChangeStatusResponse {
-  string orderId = 1;
+  string id = 1;
   string orderStatus = 2;
 }
 
 message FindOrderRequest {
-  string orderId = 1;
+  string id = 1;
 }
 
 message FindOrderResponse {
-  string orderId = 1;
+  string id = 1;
   string orderStatus = 2;
   float startLat = 3;
   float startLng = 4;
