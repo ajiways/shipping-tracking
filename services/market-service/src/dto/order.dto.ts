@@ -1,19 +1,23 @@
-import { IsNumber, Min } from "class-validator";
+import { IsNumber, IsString, Min } from "class-validator";
+import { OrderStatus } from "src/order.entity";
 
 export class OrderDto {
    @IsNumber()
    @Min(1)
-   orderId: number;
+   id: number;
    
-   orderStatus: string;
+   @IsString()
+   orderStatus: OrderStatus;
 
-   end: {
-     lat: number,
-     lng: number,
-   };
+   @IsNumber()
+   startLat: number;
 
-   start: {
-    lat: number,
-    lng: number,
-  };
+   @IsNumber()
+   startLng: number;
+
+   @IsNumber()
+   endLat: number;
+
+   @IsNumber()
+   endLng: number;
 }

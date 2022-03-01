@@ -7,55 +7,40 @@ export enum OrderStatus {
   deliveredOrder = 'Заказ доставлен',
 }
 
-
 export interface CreateOrderRequest {  
-  orderStatus: OrderStatus;
-
-   start: {
-    lat: number,
-    lng: number,
-  };
-
-  end: {
-    lat: number,
-    lng: number,
-  };
+  startLat: number;
+  startLng: number;
+  endLat: number;
+  endLng: number;
 }
 
 export interface FindOrderRequest {
-  orderId: string;
+  id: string;
 }
 
 export interface FindOrderResponse {
-  orderStatus: OrderStatus;
-
-  start: {
-   lat: number,
-   lng: number,
- };
-
- end: {
-   lat: number,
-   lng: number,
- };
+  startLat: number;
+  startLng: number;
+  endLat: number;
+  endLng: number;
 }
 
 export interface CreateOrderResponse {
-  orderId: string;
+  id: string;
 }
 
 export interface ChangeStatusRequest {
-  orderId: string;
+  id: string;
   orderStatus: OrderStatus;
 }
 
 export interface ChangeStatusResponse {
-  orderId: string;
+  id: string;
   orderStatus: OrderStatus;
 }
 
 export interface MarketService {
-  createOrder(id: string, req: CreateOrderRequest): Observable<CreateOrderResponse>;
+  createOrder(req: CreateOrderRequest): Observable<CreateOrderResponse>;
   changeStatus(req: ChangeStatusRequest): Observable<ChangeStatusResponse>;
   findOrder(id: FindOrderRequest): Observable<FindOrderResponse>;
 }

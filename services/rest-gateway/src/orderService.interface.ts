@@ -15,7 +15,7 @@ export interface CreateOrderRequest {
 }
 
 export interface FindOrderRequest {
-  orderId: string;
+  id: string;
 }
 
 export interface FindOrderResponse {
@@ -26,16 +26,16 @@ export interface FindOrderResponse {
 }
 
 export interface CreateOrderResponse {
-  orderId: string;
+  id: string;
 }
 
 export interface ChangeStatusRequest {
-  orderId: string;
+  id: string;
   orderStatus: OrderStatus;
 }
 
 export interface ChangeStatusResponse {
-  orderId: string;
+  id: string;
   orderStatus: OrderStatus;
 }
 

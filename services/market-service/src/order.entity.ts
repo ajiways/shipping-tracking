@@ -15,8 +15,8 @@ export enum OrderStatus {
 @Entity('order')
 export class OrderEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
-  orderId!: number;
-
+  id!: number;
+  
   @Column({
     type: 'enum',
     enum: OrderStatus,
