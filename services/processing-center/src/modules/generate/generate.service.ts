@@ -1,3 +1,6 @@
+import { OrderCoordinates, Order, OrderStatus } from './../../interface/order';
+import { ProcessingService } from './../processing/processing.service';
+import { Logger, Inject, forwardRef } from '@nestjs/common';
 import {
   SubscribeMessage,
   WebSocketGateway,
@@ -6,38 +9,39 @@ import {
   OnGatewayConnection,
   OnGatewayDisconnect,
 } from '@nestjs/websockets';
-import { Inject, Logger, OnModuleInit } from '@nestjs/common';
 import { Socket, Server } from 'socket.io';
-import { ClientKafka } from '@nestjs/microservices';
 
 @WebSocketGateway(3002, { cors: true })
 export class GenerateGateway
-  implements
-    OnGatewayInit,
-    OnGatewayConnection,
-    OnGatewayDisconnect,
-    OnModuleInit
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
   @WebSocketServer()
   server: Server;
-
-  async onModuleInit() {
-    await this.kafkaClient.connect();
-  }
-  @Inject('coordinates')
-  private readonly kafkaClient: ClientKafka;
+  constructor(
+    @Inject(forwardRef(() => ProcessingService))
+    private readonly processingService: ProcessingService,
+  ) {}
 
   private logger: Logger = new Logger('AppGateway');
-  private state: any[] = [];
 
   @SubscribeMessage('CoordinatesToServer')
-  handleMessage(client: Socket, payload: any): void {
-    // console.log(payload);
-    this.kafkaClient.emit('coordinates.transfer', payload);
+  handleMessage(client: Socket, payload: OrderCoordinates): void {
+    console.log(payload);
+    this.server.emit('coordinatesServer', payload);
+    this.processingService.sendCoordinates(payload);
   }
 
-  coordinatesGenerateToClient(response): void {
-    this.server.emit('generateCoords', response);
+  @SubscribeMessage('CoordinatesEnd')
+  handleMessageCoordinates(client: Socket, payload: number): void {
+    console.log(payload, 'СМЕНА 1');
+    this.processingService.changeStatus({
+      id: payload,
+      orderStatus: OrderStatus.deliveredOrder,
+    });
+  }
+  orderToClient(order: Order): void {
+    console.log(order);
+    this.server.emit('generateCoords', order);
   }
 
   afterInit(server: Server) {

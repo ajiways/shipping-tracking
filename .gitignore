@@ -1,8 +1,11 @@
 services/maps/dist
 services/maps/node_modules
+services/maps/build
 
 service/generateClient/dist
 service/generateClient/node_modules
+service/generateClient/build
 
 service/Client/dist
 service/Client/node_modules
+service/Client/build

@@ -1,13 +1,15 @@
 import {
   OrderAction,
   OrderActionTypes,
-  OrderState
+  OrderState,
+  OrderStatus
 } from '../../types-reducers/order';
 
 const initialState: OrderState = {
   order: null,
   isLoading: false,
-  loaded: false
+  loaded: false,
+  error: false
 };
 
 export const orderReducer = (
@@ -19,12 +21,20 @@ export const orderReducer = (
       return {
         order: action.payload,
         isLoading: false,
-        loaded: true
+        loaded: true,
+        error: false
       };
     case OrderActionTypes.FETCH_ORDER:
       return {
         ...state,
         isLoading: true
+      };
+    case OrderActionTypes.FETCH_ORDER_ERROR:
+      return {
+        ...state,
+        loaded: true,
+        isLoading: false,
+        error: true
       };
     default:
       return state;

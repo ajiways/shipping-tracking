@@ -1,14 +1,15 @@
 import { join } from 'path';
-import { BROKER_HOST, BROKER_PORT } from './../../constants/config.contsants';
-import {
-  NAVIGATION_SERVICE,
-  COORDINATES_KAFKA,
-  COORDINATES_GRPC,
-} from './../../constants/constants';
+import { GenerateGateway } from './../generate/generate.service';
 import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { ProcessingService } from '../processing/processing.service';
-import { GenerateGateway } from './generate.service';
+import { BROKER_PORT, BROKER_HOST } from './../../constants/config.contsants';
+import {
+  NAVIGATION_SERVICE,
+  COORDINATES_GRPC,
+  COORDINATES_KAFKA,
+} from './../../constants/constants';
+import { ProcessingController } from './processing.controller';
+import { ProcessingService } from './processing.service';
 
 @Module({
   imports: [
@@ -36,8 +37,8 @@ import { GenerateGateway } from './generate.service';
       },
     ]),
   ],
-  controllers: [],
-  providers: [GenerateGateway, ProcessingService],
-  exports: [GenerateGateway],
+  controllers: [ProcessingController],
+  providers: [ProcessingService, GenerateGateway],
+  exports: [ProcessingService],
 })
-export class GenerateModule {}
+export class ProcessingModule {}

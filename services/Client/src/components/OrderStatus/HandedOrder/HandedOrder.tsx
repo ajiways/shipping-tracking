@@ -1,33 +1,31 @@
 import { Typography } from 'antd';
-import { FC, useEffect } from 'react';
-import * as io from 'socket.io-client';
+import { FC, useEffect, useState } from 'react';
 import { useTypedSelector } from '../../../hooks/useTypedSelector';
 import { Order } from '../../../types-reducers/order';
 import { lineSymbol } from '../../common/polyline';
 
 export const HandedOrder: FC = () => {
   const { order } = useTypedSelector((state) => state.order);
-  const socket = io.connect('http://localhost:3002');
 
   const mapOptions: google.maps.MapOptions = {
-    center: { lat: order!.start.lat, lng: order!.start.lng },
+    center: { lat: order!.startLat, lng: order!.startLng },
     zoom: 8
   };
-  console.log(order);
-  const map = new google.maps.Map(document.getElementById('map')!, mapOptions);
+
+  const mapsDiv = document.getElementById('map')!;
+  mapsDiv!.className = 'map';
+  let map = new google.maps.Map(mapsDiv, mapOptions);
 
   useEffect(() => {
     let marker = new google.maps.Marker({
       map,
       icon: lineSymbol
     });
-    socket.on('coordinatesServer', (data: Order) => {
-      drawMarker(data, marker);
-    });
 
     return () => {
+      const maps = document.getElementById('map');
+      maps!.className = 'map__hidden';
       deleteMarker(marker);
-      socket.close();
     };
   }, []);
 

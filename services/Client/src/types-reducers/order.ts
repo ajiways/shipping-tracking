@@ -2,13 +2,21 @@ export interface OrderState {
   order: Order | null;
   isLoading: boolean;
   loaded: boolean;
+  error: boolean;
 }
 
 export enum OrderActionTypes {
   FETCH_ORDER = 'FETCH_ORDER',
-  FETCH_ORDER_SUCCES = 'FETCH_ORDER_SUCCES'
+  FETCH_ORDER_SUCCES = 'FETCH_ORDER_SUCCES',
+  FETCH_ORDER_ERROR = 'FETCH_ORDER_ERROR',
+  SEND_ORDER = 'SEND_ORDER',
+  SEND_ORDER_SUCCES = 'SEND_ORDER_SUCCES',
+  SEND_ORDER_ERROR = 'SEND_ORDER_ERROR'
 }
 
+interface FetchOrderError {
+  type: OrderActionTypes.FETCH_ORDER_ERROR;
+}
 interface FetchOrder {
   type: OrderActionTypes.FETCH_ORDER;
 }
@@ -18,12 +26,30 @@ interface FetchOrderSucces {
   payload: Order;
 }
 
-export type OrderAction = FetchOrder | FetchOrderSucces;
+interface SendOrder {
+  type: OrderActionTypes.SEND_ORDER;
+}
+interface SendOrderSucces {
+  type: OrderActionTypes.SEND_ORDER_SUCCES;
+}
+interface SendOrderError {
+  type: OrderActionTypes.SEND_ORDER_ERROR;
+}
+
+export type OrderAction =
+  | FetchOrder
+  | FetchOrderSucces
+  | FetchOrderError
+  | SendOrder
+  | SendOrderSucces
+  | SendOrderError;
 
 export interface Order {
   id: number;
-  start: { lat: number; lng: number };
-  end: { lat: number; lng: number };
+  startLat: number;
+  startLng: number;
+  endLat: number;
+  endLng: number;
   orderStatus: OrderStatus;
   coordinates: { lat: number; lng: number } | null;
 }
