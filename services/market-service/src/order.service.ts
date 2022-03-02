@@ -3,8 +3,10 @@ import { Client, ClientKafka, Transport } from '@nestjs/microservices';
 import { OrderDto } from './dto/order.dto';
 import { lastValueFrom } from 'rxjs'
 import { OrderEntity } from './order.entity'
-import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
+
 
 @Injectable()
 export class OrderService implements OnModuleInit {
