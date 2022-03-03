@@ -2,7 +2,6 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { Client, ClientGrpc, Transport } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
 import {
-  ChangeStatusRequest,
   FindOrderRequest,
   MarketService,
 } from './orderService.interface';

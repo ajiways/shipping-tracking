@@ -19,7 +19,7 @@ import { OrderService } from './order.service';
             brokers: ['localhost:9094'],
           },
           consumer: {
-            groupId: 'navigation.service',
+            groupId: 'navigation.market',
           },
         },
       },
