@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { FormOrder } from './FormOrder';
 import * as io from 'socket.io-client';
 
@@ -20,14 +20,13 @@ export enum OrderStatus {
   deliveredOrder = 'Заказ доставлен'
 }
 
-export const CreateOrder = () => {
+interface Props {
+  map: google.maps.Map;
+}
+
+export const CreateOrder: FC<Props> = ({ map }) => {
   const [position, setPosition] = useState({ lat: 51.77, lng: 55.1 });
   const divMap = document.getElementById('map');
-  const mapOptions: google.maps.MapOptions = {
-    center: position,
-    zoom: 12
-  };
-  const map = new google.maps.Map(document.getElementById('map')!, mapOptions);
 
   const marker = new google.maps.Marker({
     map,
@@ -45,11 +44,6 @@ export const CreateOrder = () => {
       divMap!.className = 'map__hidden';
     };
   }, []);
-
-  socket.on('coordinatesServer', (data: OrderCoordinates) => {
-    console.log(data);
-    marker.setPosition({ lat: data.currentLat, lng: data.currentLng });
-  });
 
   useEffect(() => {
     let infoWindow = new google.maps.InfoWindow({});

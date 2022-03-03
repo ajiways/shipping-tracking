@@ -1,5 +1,5 @@
 import { MarketService } from './interface/market';
-import { OrderCoordinates, ChangeStatus } from './../../interface/order';
+import { OrderCoordinates } from './../../interface/order';
 import { ClientGrpc, ClientKafka } from '@nestjs/microservices';
 import {
   COORDINATES_KAFKA,
@@ -21,14 +21,15 @@ export class ProcessingService {
       this.grpcClient.getService<MarketService>(MARKET_SERVICE);
   }
 
-  async changeStatus(order: ChangeStatus) {
-    this.coordinatesService.changeStatus({
-      id: order.id,
-      orderStatus: order.orderStatus,
-    });
+  async handed(id: number) {
+    await lastValueFrom(this.coordinatesService.handed({ id }));
+  }
+
+  async deliviried(id: number) {
+    await lastValueFrom(this.coordinatesService.deliviried({ id }));
   }
 
   async sendCoordinates(order: OrderCoordinates) {
-    return await lastValueFrom(this.kafkaClient.emit('Coordinates', order));
+    this.kafkaClient.emit('get.coordinates', order);
   }
 }

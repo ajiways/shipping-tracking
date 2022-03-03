@@ -8,6 +8,8 @@ export enum OrderStatus {
 }
 
 export interface CreateOrderRequest {
+  id: number;
+  orderStatus: OrderStatus;
   startLat: number;
   startLng: number;
   endLat: number;
@@ -15,10 +17,12 @@ export interface CreateOrderRequest {
 }
 
 export interface FindOrderRequest {
-  id: number;
+  id: string;
 }
 
 export interface FindOrderResponse {
+  id: number;
+  orderStatus: OrderStatus;
   startLat: number;
   startLng: number;
   endLat: number;
@@ -26,21 +30,32 @@ export interface FindOrderResponse {
 }
 
 export interface CreateOrderResponse {
-  id: number;
+  id: string;
 }
 
 export interface ChangeStatusRequest {
-  id: number;
+  id: string;
   orderStatus: OrderStatus;
 }
 
 export interface ChangeStatusResponse {
+  id: string;
+  orderStatus: OrderStatus;
+}
+
+export interface UpdatedOrder {
   id: number;
   orderStatus: OrderStatus;
+  startLat: number;
+  startLng: number;
+  endLat: number;
+  endLng: number;
 }
 
 export interface MarketService {
   createOrder(req: CreateOrderRequest): Observable<CreateOrderResponse>;
-  changeStatus(req: ChangeStatusRequest): Observable<ChangeStatusResponse>;
   findOrder(id: FindOrderRequest): Observable<FindOrderResponse>;
+  handed(data: { id: number }): Observable<UpdatedOrder>;
+  deliviried(data: { id: number }): Observable<UpdatedOrder>;
+  paid(data: { id: number }): Observable<UpdatedOrder>;
 }

@@ -1,5 +1,5 @@
 import { Order, OrderStatus, OrderToWS } from './../../interface/order';
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { GoogleMap } from 'src/api/api';
 import { ProcessingService } from './processing.service';
@@ -12,65 +12,30 @@ export class ProcessingController {
     private readonly generateGateway: GenerateGateway,
   ) {}
 
-  @MessagePattern('change.status')
-  async generate(@Payload() data: Order) {
-    // Запрос за данными для генерации
+  @MessagePattern('order.change')
+  async generate(@Payload('value') data: { order: Order }) {
+    console.log('WORKS');
+    if (data.order.orderStatus === OrderStatus.packingOrder) {
+      const response = await GoogleMap.getPolyline(
+        { lat: data.order.startLat, lng: data.order.startLng },
+        { lat: data.order.endLat, lng: data.order.endLng },
+      );
 
-    const response = await GoogleMap.getPolyline(
-      { lat: data.startLat, lng: data.startLng },
-      { lat: data.endLat, lng: data.endLng },
-    );
-    // Проверка
-    if (data.orderStatus === OrderStatus.packingOrder) {
       setTimeout(async () => {
         // change статус
         const order: OrderToWS = {
-          id: data.id,
-          startLat: data.startLat,
-          startLng: data.startLng,
+          id: data.order.id,
+          startLat: data.order.startLat,
+          startLng: data.order.startLng,
           orderStatus: OrderStatus.handedToCourier,
-          endLat: data.endLat,
-          endLng: data.endLng,
+          endLat: data.order.endLat,
+          endLng: data.order.endLng,
           data: response,
         };
         //order => kafka[changeStatus]
-        this.processingService.changeStatus({
-          id: order.id,
-          orderStatus: order.orderStatus,
-        });
+        this.processingService.handed(data.order.id);
         this.generateGateway.orderToClient(order);
-      }, 2500);
-    }
-  }
-
-  @Post('order')
-  async generatez(@Body() data: Order) {
-    // Запрос за данными для генерации
-
-    const response = await GoogleMap.getPolyline(
-      { lat: data.startLat, lng: data.startLng },
-      { lat: data.endLat, lng: data.endLng },
-    );
-    // Проверка
-    if (data.orderStatus === OrderStatus.packingOrder) {
-      setTimeout(async () => {
-        // change статус
-        const order: OrderToWS = {
-          id: data.id,
-          startLat: data.startLat,
-          startLng: data.startLng,
-          orderStatus: OrderStatus.handedToCourier,
-          endLat: data.endLat,
-          endLng: data.endLng,
-          data: response,
-        };
-        //order => kafka[changeStatus]
-        this.processingService.changeStatus({
-          id: order.id,
-          orderStatus: order.orderStatus,
-        });
-        this.generateGateway.orderToClient(order);
-      }, 10);
+      }, 5000);
     }
   }
 }

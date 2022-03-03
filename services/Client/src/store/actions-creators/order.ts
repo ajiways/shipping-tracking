@@ -1,5 +1,9 @@
 import { Dispatch } from '@reduxjs/toolkit';
-import { OrderAction, OrderActionTypes } from '../../types-reducers/order';
+import {
+  OrderAction,
+  OrderActionTypes,
+  OrderStatus
+} from '../../types-reducers/order';
 import * as io from 'socket.io-client';
 import { ServerAPI } from '../../api/api';
 import { orderCreate } from '../../interfaces/order';
@@ -10,15 +14,17 @@ export const fetchCoordinates = (value) => {
     } catch (e) {}
   };
 };
-const socket = io.connect('http://localhost:3002');
+
+const socket = io.connect('http://localhost:3019');
 
 export const FetchOrder = (id: string) => {
   return async (dispatch: Dispatch<OrderAction>) => {
     try {
       dispatch({ type: OrderActionTypes.FETCH_ORDER });
-      socket.removeListener('coordinatesServer');
-      socket.emit('CoordinatesToServer', id);
-      socket.on('coordinatesServer', (data) => {
+      socket.close();
+      socket.connect();
+      socket.emit('order.subscribe', id);
+      socket.on('watch.order', (data) => {
         dispatch({
           type: OrderActionTypes.FETCH_ORDER_SUCCES,
           payload: data
@@ -30,19 +36,24 @@ export const FetchOrder = (id: string) => {
   };
 };
 
-export const SendOrder = (id) => {
-  return async (dispath: Dispatch<OrderAction>) => {
+export const CreateOrder = (orderCreate: orderCreate) => {
+  return async (dispatch: Dispatch<OrderAction>) => {
     try {
-      socket.emit('CoordinatesToServer', id);
-      dispath({ type: OrderActionTypes.SEND_ORDER });
+      const response = await ServerAPI.createOrder(orderCreate);
+      dispatch({
+        type: OrderActionTypes.SEND_ORDER_SUCCES,
+        payload: { id: response }
+      });
     } catch (error) {}
   };
 };
 
-export const CreateOrder = (orderCreate: orderCreate) => {
+export const PaymentConfirm = (id: number) => {
   return async (dispatch: Dispatch<OrderAction>) => {
     try {
-      ServerAPI.createOrder(orderCreate);
-    } catch (error) {}
+      ServerAPI.paymentOrder(id);
+    } catch (error) {
+      console.log(error);
+    }
   };
 };

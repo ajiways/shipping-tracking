@@ -1,43 +1,39 @@
 import { Typography } from 'antd';
 import { FC, useEffect, useState } from 'react';
-import { useTypedSelector } from '../../../hooks/useTypedSelector';
 import { Order } from '../../../types-reducers/order';
 import { lineSymbol } from '../../common/polyline';
 
-export const HandedOrder: FC = () => {
-  const { order } = useTypedSelector((state) => state.order);
+interface Props {
+  map: google.maps.Map;
+  order: Order;
+}
 
-  const mapOptions: google.maps.MapOptions = {
-    center: { lat: order!.startLat, lng: order!.startLng },
-    zoom: 8
-  };
-
+export const HandedOrder: FC<Props> = ({ order, map }) => {
   const mapsDiv = document.getElementById('map')!;
   mapsDiv!.className = 'map';
-  let map = new google.maps.Map(mapsDiv, mapOptions);
 
   useEffect(() => {
     let marker = new google.maps.Marker({
       map,
       icon: lineSymbol
     });
-
+    drawMarker(order, marker);
     return () => {
-      const maps = document.getElementById('map');
-      maps!.className = 'map__hidden';
       deleteMarker(marker);
     };
-  }, []);
+  }, [order]);
 
   return (
-    <>
-      <Typography.Title>Передан курьеру</Typography.Title>
-    </>
+    <div>
+      <Typography.Title style={{ textAlign: 'center', fontSize: '30px' }}>
+        Номер {order.id} - {order.orderStatus}
+      </Typography.Title>
+    </div>
   );
 };
 
 function drawMarker(data: Order, marker: google.maps.Marker) {
-  marker.setPosition(data.coordinates);
+  marker.setPosition({ lat: data.currentLat!, lng: data.currentLng! });
 }
 
 function deleteMarker(marker: google.maps.Marker) {

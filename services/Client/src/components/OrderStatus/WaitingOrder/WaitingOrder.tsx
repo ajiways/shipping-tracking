@@ -1,16 +1,77 @@
-import { Button, Typography } from 'antd';
+import { Button, Card, Table, Typography } from 'antd';
 import { FC } from 'react';
+import { useActions } from '../../../hooks/useActions';
 import { useTypedSelector } from '../../../hooks/useTypedSelector';
+import { Order } from '../../../types-reducers/order';
+import { OrderStatus } from '../../CreateOrder/CreateOrder';
 
-export const WaitingOrder: FC = () => {
-  const { order } = useTypedSelector((state) => state.order);
+interface Props {
+  order: Order;
+}
+
+export const WaitingOrder: FC<Props> = ({ order }) => {
+  const { id } = order;
+  const { PaymentConfirm } = useActions();
+  const mapsDiv = document.getElementById('map')!;
+  mapsDiv!.className = 'map__hidden';
+
+  const columns = [
+    {
+      title: '',
+      dataIndex: 'name'
+    },
+    {
+      title: 'Lat',
+      dataIndex: 'Lat'
+    },
+    {
+      title: 'Lng',
+      dataIndex: 'Lng'
+    }
+  ];
+
+  const data = [
+    {
+      key: '1',
+      name: 'Начальные координаты',
+      Lat: order.startLat,
+      Lng: order.startLng
+    },
+    {
+      key: '2',
+      name: 'Конечные координаты',
+      Lat: order.endLat,
+      Lng: order.endLng
+    }
+  ];
+
   return (
     <>
-      <Typography.Title>Ожидается оплата</Typography.Title>
-      <Typography.Text style={{ fontSize: '20px', marginRight: '40px' }}>
-        Номер заказа {order}
-      </Typography.Text>
-      <Button>Оплатить</Button>
+      <Card
+        title={`Заказ номер: ${order.id} - ${order.orderStatus}`}
+        style={{ width: '40%', margin: '20px auto 20px' }}
+      >
+        <Table
+          columns={columns}
+          dataSource={data}
+          size="middle"
+          pagination={false}
+        >
+          <Typography.Text>
+            Координаты начала: {order.startLat}, {order.startLng}
+          </Typography.Text>
+        </Table>
+        <Button
+          type="primary"
+          size="large"
+          style={{ width: '100%', marginTop: '25px' }}
+          onClick={() => {
+            PaymentConfirm(id);
+          }}
+        >
+          Оплатить
+        </Button>
+      </Card>
     </>
   );
 };

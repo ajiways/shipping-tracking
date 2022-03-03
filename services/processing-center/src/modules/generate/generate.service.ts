@@ -27,17 +27,14 @@ export class GenerateGateway
   @SubscribeMessage('CoordinatesToServer')
   handleMessage(client: Socket, payload: OrderCoordinates): void {
     console.log(payload);
-    this.server.emit('coordinatesServer', payload);
     this.processingService.sendCoordinates(payload);
   }
 
   @SubscribeMessage('CoordinatesEnd')
-  handleMessageCoordinates(client: Socket, payload: number): void {
+  handleMessageCoordinates(client: Socket, payload: OrderCoordinates): void {
     console.log(payload, 'СМЕНА 1');
-    this.processingService.changeStatus({
-      id: payload,
-      orderStatus: OrderStatus.deliveredOrder,
-    });
+
+    this.processingService.deliviried(payload.id);
   }
   orderToClient(order: Order): void {
     console.log(order);

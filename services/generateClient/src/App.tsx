@@ -87,7 +87,7 @@ function animateCircle(pathCoordinates, data: OrderWS) {
     }
     if (countLength === length - 1) {
       console.log('SMENA');
-      socket.emit('CoordinatesEnd', data.id);
+      socket.emit('CoordinatesEnd', data);
       clearInterval(interval);
     }
   }, 100);

@@ -5,14 +5,31 @@ package market_service;
 service MarketService {
   rpc CreateOrder (CreateOrderRequest)
       returns (CreateOrderResponse);
-  rpc ChangeStatus (ChangeStatusRequest)
-      returns (ChangeStatusResponse);
   rpc FindOrder (FindOrderRequest)
       returns (FindOrderResponse);
+  rpc Deliviried (id)
+      returns (UpdatedOrder);
+  rpc Handed(id)
+      returns (UpdatedOrder);
+  rpc Paid(id)
+      returns (UpdatedOrder);
+}
+
+message id {
+  uint32 id = 1;
 }
 
 message CreateOrderRequest {
-  string id = 1;
+  uint32 id = 1;
+  string orderStatus = 2;
+  float startLat = 3;
+  float startLng = 4;
+  float endLat = 5;
+  float endLng = 6;
+}
+
+message UpdatedOrder { 
+  uint32 id = 1;
   string orderStatus = 2;
   float startLat = 3;
   float startLng = 4;
@@ -21,25 +38,25 @@ message CreateOrderRequest {
 }
 
 message CreateOrderResponse {
-  string id = 1;
+  uint32 id = 1;
 }
 
 message ChangeStatusRequest {
-  string id = 1;
+  uint32 id = 1;
   string orderStatus = 2;
 }
 
 message ChangeStatusResponse {
-  string id = 1;
+  uint32 id = 1;
   string orderStatus = 2;
 }
 
 message FindOrderRequest {
-  string id = 1;
+  uint32 id = 1;
 }
 
 message FindOrderResponse {
-  string id = 1;
+  uint32 id = 1;
   string orderStatus = 2;
   float startLat = 3;
   float startLng = 4;

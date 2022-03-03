@@ -21,7 +21,7 @@ import { GenerateGateway } from './generate.service';
             brokers: [`${BROKER_HOST}:${BROKER_PORT}`],
           },
           consumer: {
-            groupId: NAVIGATION_SERVICE,
+            groupId: 'navigation.processing',
           },
         },
       },
@@ -31,7 +31,7 @@ import { GenerateGateway } from './generate.service';
         options: {
           package: 'market_service',
           protoPath: join(__dirname, './../../../contracts/orders.proto'),
-          url: '127.0.0.1:3005',
+          url: '127.0.0.1:3004',
         },
       },
     ]),

@@ -1,9 +1,13 @@
 import { Button, Col, Form, Input, Row, Typography } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import { FC, useEffect } from 'react';
+import { useActions } from '../../hooks/useActions';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
 
 export const FormOrder: FC = () => {
   const [form] = useForm();
+  const { CreateOrder } = useActions();
+  const { id } = useTypedSelector((state) => state.order);
 
   return (
     <>
@@ -16,7 +20,7 @@ export const FormOrder: FC = () => {
             flex: '110px'
           }}
           onFinish={() => {
-            console.log(form.getFieldsValue());
+            CreateOrder(form.getFieldsValue());
           }}
         >
           <div style={{ marginBottom: '10px', textAlign: 'center' }}>
@@ -85,6 +89,13 @@ export const FormOrder: FC = () => {
           </Form.Item>
         </Form>
       </Row>
+      {id ? (
+        <Typography.Title style={{ fontSize: '25px', textAlign: 'center' }}>
+          Номер заказа: {id}
+        </Typography.Title>
+      ) : (
+        <></>
+      )}
     </>
   );
 };

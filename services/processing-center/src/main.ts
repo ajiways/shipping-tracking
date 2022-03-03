@@ -6,29 +6,17 @@ import { BROKER_HOST, BROKER_PORT } from './constants/config.contsants';
 import { NAVIGATION_SERVICE } from './constants/constants';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  app.connectMicroservice<MicroserviceOptions>({
+  const app = await NestFactory.createMicroservice(AppModule, {
     transport: Transport.KAFKA,
     options: {
       client: {
         brokers: [`${BROKER_HOST}:${BROKER_PORT}`],
       },
       consumer: {
-        groupId: NAVIGATION_SERVICE,
+        groupId: 'navigation.processing',
       },
     },
   });
-
-  app.connectMicroservice<MicroserviceOptions>({
-    transport: Transport.GRPC,
-    options: {
-      package: 'market_service',
-      protoPath: join(__dirname, './../contracts/orders.proto'),
-      url: '127.0.0.1:3005',
-    },
-  });
-  // app.connectMicroservice({})
-  app.startAllMicroservices();
-  app.listen(2005);
+  app.listen();
 }
 bootstrap();

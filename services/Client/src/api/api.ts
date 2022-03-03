@@ -5,15 +5,18 @@ import { Order, OrderStatus } from '../types-reducers/order';
 const API_KEY = 'AIzaSyAnolHAY1cSxTBCexjTsKHVXkn8lgWp1is';
 
 const instance = axios.create({
-  baseURL: 'http://localhost:3005'
+  baseURL: 'http://localhost:4000'
 });
 
 export const ServerAPI = {
   async createOrder(orderCreate: orderCreate) {
-    const response = await instance.post('order/create', orderCreate);
+    const response = await instance.post('/create', orderCreate);
+    return response.data;
   },
 
-  async paymentOrder(status) {
-    const response = await instance.put('order/payments', { status: status });
+  async paymentOrder(id: number) {
+    const response = await instance.put('/paid', { id });
+
+    console.log(response);
   }
 };

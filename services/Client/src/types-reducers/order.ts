@@ -3,6 +3,7 @@ export interface OrderState {
   isLoading: boolean;
   loaded: boolean;
   error: boolean;
+  id: number | null;
 }
 
 export enum OrderActionTypes {
@@ -31,6 +32,7 @@ interface SendOrder {
 }
 interface SendOrderSucces {
   type: OrderActionTypes.SEND_ORDER_SUCCES;
+  payload: { id: number };
 }
 interface SendOrderError {
   type: OrderActionTypes.SEND_ORDER_ERROR;
@@ -51,7 +53,8 @@ export interface Order {
   endLat: number;
   endLng: number;
   orderStatus: OrderStatus;
-  coordinates: { lat: number; lng: number } | null;
+  currentLat?: number;
+  currentLng?: number;
 }
 
 export enum OrderStatus {
