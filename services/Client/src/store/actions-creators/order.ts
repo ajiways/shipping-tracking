@@ -1,10 +1,12 @@
+import { ORDER_SUBSCRIBE, WATCH_ORDER } from './../../constants/constants';
+import { HOST_WS, PORT_WS } from './../../constants/config.contsants';
 import { Dispatch } from '@reduxjs/toolkit';
 import { OrderAction, OrderActionTypes } from '../../types-reducers/order';
 import * as io from 'socket.io-client';
 import { ServerAPI } from '../../api/api';
 import { orderCreate } from '../../interfaces/order';
 
-const socket = io.connect('http://localhost:3019');
+const socket = io.connect(`${HOST_WS}:${PORT_WS}`);
 
 export const FetchOrder = (id: string) => {
   return async (dispatch: Dispatch<OrderAction>) => {
@@ -12,8 +14,8 @@ export const FetchOrder = (id: string) => {
       dispatch({ type: OrderActionTypes.FETCH_ORDER });
       socket.close();
       socket.connect();
-      socket.emit('order.subscribe', id);
-      socket.on('watch.order', (data) => {
+      socket.emit(ORDER_SUBSCRIBE, id);
+      socket.on(WATCH_ORDER, (data) => {
         dispatch({
           type: OrderActionTypes.FETCH_ORDER_SUCCESS,
           payload: data

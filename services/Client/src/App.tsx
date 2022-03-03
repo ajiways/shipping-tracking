@@ -8,7 +8,6 @@ import { useEffect, useState } from 'react';
 
 export default function App() {
   const [position, setPosition] = useState({ lat: 51.77, lng: 55.1 });
-
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((pos) => {
       setPosition({ lat: pos.coords.latitude, lng: pos.coords.longitude });
