@@ -1,24 +1,15 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { Client, ClientGrpc, Transport } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
-import { ChangeStatusRequest, FindOrderRequest, MarketService } from './orderService.interface';
-import { v4 } from 'uuid'
+import {
+  ChangeStatusRequest,
+  FindOrderRequest,
+  MarketService,
+} from './orderService.interface';
 import { resolve } from 'path';
 
 @Injectable()
-export class RestService {
-  private marketService: MarketService;
-  orderData = {
-    startLat: 36.065941,
-    startLng: 103.747669,
-    endLat: 36.06486114292329,
-    endLng: 103.75794504821553,
-  }
-  constructor(
-    @Inject('MarketService') grpcClient: ClientGrpc
-  ) {
-    this.marketService = grpcClient.getService<MarketService>('MarketService')
-  }
+export class RestService implements OnModuleInit {
   @Client({
     transport: Transport.GRPC,
     options: {
@@ -27,19 +18,36 @@ export class RestService {
       url: '127.0.0.1:3004',
     },
   })
-  private grpcClient: ClientGrpc
+  private grpcClient: ClientGrpc;
+  private marketService: MarketService;
 
-  async createOrder() { 
-    const result = await lastValueFrom(this.marketService.createOrder(this.orderData))
-    return result;
+  onModuleInit() {
+    this.marketService =
+      this.grpcClient.getService<MarketService>('MarketService');
   }
 
-  async findOrder(data: FindOrderRequest) { 
-    return await lastValueFrom(this.marketService.findOrder(data))
+  async createOrder(data) {
+    console.log('Order created');
+    const res = await lastValueFrom(this.marketService.createOrder(data));
+
+    console.log(res);
+
+    return res;
   }
 
-  async changeStatus(data: ChangeStatusRequest) { 
-    return await lastValueFrom(this.marketService.changeStatus(data))
+  async findOrder(data: FindOrderRequest) {
+    return await lastValueFrom(this.marketService.findOrder(data));
   }
 
+  async handed(id: number) {
+    return await lastValueFrom(this.marketService.handed({ id }));
+  }
+
+  async deliviried(id: number) {
+    return await lastValueFrom(this.marketService.deliviried({ id }));
+  }
+
+  async paid(id: number) {
+    return await lastValueFrom(this.marketService.paid({ id }));
+  }
 }

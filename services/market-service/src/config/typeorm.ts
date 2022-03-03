@@ -1,6 +1,9 @@
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { ConfigService } from '@nestjs/config';
-import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import {
+  TypeOrmModuleAsyncOptions,
+  TypeOrmModuleOptions,
+} from '@nestjs/typeorm';
 
 export function getOrmConfig(): TypeOrmModuleOptions {
   const config = new ConfigService();
@@ -23,3 +26,7 @@ export function getOrmConfig(): TypeOrmModuleOptions {
     migrationsRun: true,
   };
 }
+
+export const typeOrmConfigAsync: TypeOrmModuleAsyncOptions = {
+  useFactory: async (): Promise<TypeOrmModuleOptions> => getOrmConfig(),
+};

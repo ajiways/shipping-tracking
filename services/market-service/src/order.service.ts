@@ -1,12 +1,9 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { Client, ClientKafka, Transport } from '@nestjs/microservices';
 import { OrderDto } from './dto/order.dto';
-import { lastValueFrom } from 'rxjs'
-import { OrderEntity } from './order.entity'
+import { OrderEntity, OrderStatus } from './order.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-
-
 
 @Injectable()
 export class OrderService implements OnModuleInit {
@@ -14,42 +11,83 @@ export class OrderService implements OnModuleInit {
     @InjectRepository(OrderEntity)
     private readonly orderRepository: Repository<OrderEntity>,
   ) {}
-  @Client({
-      transport: Transport.KAFKA,
-      options: {
-      client: {
-        brokers: ['localhost:9092'],
-      },
-      consumer: {
-        groupId: 'market-service',
-      }
-    }
-  })
-  private client: ClientKafka
+
+  @Inject('KAFKA')
+  private client: ClientKafka;
 
   async onModuleInit() {
-      this.client.subscribeToResponseOf('order.change');
-      this.client.subscribeToResponseOf('order.find');
-      await this.client.connect();
+    await this.client.connect();
   }
 
   async createOrder(data: OrderDto) {
-    await this.orderRepository.create({
-      id: data.id,
-      orderStatus: data.orderStatus,
+    const order = this.orderRepository.create({
       startLat: data.startLat,
       startLng: data.startLng,
       endLat: data.endLat,
       endLng: data.endLng,
-    }).save();
-    this.client.emit('order.create', data);
+    });
+    await order.save();
+
+    this.client.emit('order.create', { order: order });
+    return order;
   }
 
-  async changeStatus(data: OrderDto) {
-    return await lastValueFrom(this.client.send('order.change', data));
+  async paid(id: number) {
+    const candidate = await this.orderRepository.findOne({
+      where: { id },
+    });
+
+    if (!candidate) {
+      //..
+    }
+
+    const updatedOrder = await this.orderRepository
+      .merge(candidate, { orderStatus: OrderStatus.packingOrder })
+      .save();
+
+    this.client.emit('order.change', { order: updatedOrder });
+
+    return updatedOrder;
+  }
+
+  async handed(id: number) {
+    console.log('HANDED', id);
+    const candidate = await this.orderRepository.findOne({
+      where: { id },
+    });
+
+    if (!candidate) {
+      //..
+    }
+
+    const updatedOrder = await this.orderRepository
+      .merge(candidate, { orderStatus: OrderStatus.handedToCourier })
+      .save();
+
+    this.client.emit('order.change', { order: updatedOrder });
+
+    return updatedOrder;
+  }
+
+  async deliviried(id: number) {
+    const candidate = await this.orderRepository.findOne({
+      where: { id },
+    });
+
+    if (!candidate) {
+      //..
+    }
+
+    const updatedOrder = await this.orderRepository
+      .merge(candidate, { orderStatus: OrderStatus.deliveredOrder })
+      .save();
+
+    this.client.emit('order.change', { order: updatedOrder });
+
+    return updatedOrder;
   }
 
   async findOrder(data: OrderDto) {
-    return await lastValueFrom(this.client.send('order.find', data));
+    this.client.emit('order.find', data);
   }
 }

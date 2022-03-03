@@ -1,11 +1,5 @@
-services/gateway/dist
-services/gateway/node_modules
+services/rest-gateway/dist
+services/rest-gateway/node_modules
 
-services/administration/dist
-services/administration/node_modules
-
-services/notification/dist
-services/notification/node_modules
-
-services/market/dist
-services/market/node_modules
+services/market-service/dist
+services/market-service/node_modules

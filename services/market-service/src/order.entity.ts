@@ -1,9 +1,4 @@
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  BaseEntity,
-} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, BaseEntity } from 'typeorm';
 
 export enum OrderStatus {
   waitingOrder = 'Ожидание подтверждения оплаты',
@@ -16,7 +11,7 @@ export enum OrderStatus {
 export class OrderEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
-  
+
   @Column({
     type: 'enum',
     enum: OrderStatus,
@@ -24,15 +19,15 @@ export class OrderEntity extends BaseEntity {
   })
   orderStatus!: OrderStatus;
 
-  @Column()
+  @Column({ type: 'float' })
   startLat: number;
 
-  @Column()
+  @Column({ type: 'float' })
   startLng: number;
 
-  @Column()
+  @Column({ type: 'float' })
   endLat: number;
 
-  @Column()
+  @Column({ type: 'float' })
   endLng: number;
 }
