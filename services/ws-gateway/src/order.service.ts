@@ -14,19 +14,21 @@ export class OrderService {
   async saveOrder(order: OrderInterface) {
     await this.orderRepository
       .create({
-        orderId: order.id,
-        startLat: order.start.lat,
-        startLng: order.start.lng,
-        endLat: order.end.lat,
-        endLng: order.end.lng,
+        id: order.id,
+        startLat: order.startLat,
+        startLng: order.startLng,
+        endLat: order.endLat,
+        endLng: order.endLng,
         orderStatus: order.orderStatus,
       })
       .save();
   }
 
-  async getOrder(orderId: string) {
-    return await this.orderRepository.findOne({
-      where: { order_id: orderId },
+  async getOrder(id: number) {
+    const result = await this.orderRepository.findOne({
+      where: { id },
     });
+
+    return result;
   }
 }

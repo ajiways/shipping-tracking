@@ -1,60 +1,35 @@
-import { Server } from 'socket.io';
-import { Injectable, OnModuleInit } from '@nestjs/common';
-import { Client, ClientGrpc, Transport } from '@nestjs/microservices';
-import { WebSocketServer } from '@nestjs/websockets';
-import { resolve } from 'path';
-import { lastValueFrom } from 'rxjs';
-import { NavigationService } from './service-definitions/navigation-service/navigation.service.interface';
+import { Injectable } from '@nestjs/common';
+import { ReplaySubject } from 'rxjs';
+import {
+  WatchRequest,
+  WatchResponse,
+} from './service-definitons/navigation.service.interface';
+import { OrderService } from './order.service';
+import { Client, ClientGrpc } from '@nestjs/microservices';
+import { OrderInterface } from './interfaces/order.interface';
 
 @Injectable()
-export class AppService implements OnModuleInit {
-  @Client({
-    transport: Transport.GRPC,
-    options: {
-      package: 'nav_service',
-      protoPath: resolve(__dirname, './proto/service.proto'),
-      url: `127.0.0.1:3001`,
-    },
-  })
+export class AppService {
+  @Client({})
   private readonly grpcClient: ClientGrpc;
-  private navigationService: NavigationService;
 
-  @WebSocketServer()
-  private readonly server: Server;
+  constructor(private readonly orderService: OrderService) {}
 
-  onModuleInit() {
-    this.navigationService =
-      this.grpcClient.getService<NavigationService>('NavigationService');
+  async getOrder(id: number) {
+    return await this.orderService.getOrder(id);
   }
 
-  async getOrder(id: string) {
-    const result = await lastValueFrom(this.navigationService.getOrder({ id }));
+  startTransfer(data: OrderInterface) {
+    const rxResponse = new ReplaySubject<WatchRequest>();
 
-    if (!result) {
-      this.server.emit('order.error', {
-        message: 'Такого заказа нет',
-        status: 322,
-      });
-      return;
-    }
-
-    this.server.emit('order.sent', result);
-  }
-
-  async transferStart(id: string) {
-    const rxResponse = this.navigationService.transferStart({ id });
-    const server = this.server;
-
-    rxResponse.subscribe({
-      next(msg) {
-        server.emit('coordinates.send', msg);
-      },
-      complete() {
-        console.log('Connection closed');
-      },
-      error(err) {
-        console.log('Error', err);
-      },
+    rxResponse.next({
+      id: data.id,
     });
+
+    return rxResponse.asObservable();
+  }
+
+  async saveOrder(order: OrderInterface) {
+    await this.orderService.saveOrder(order);
   }
 }

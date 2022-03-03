@@ -5,11 +5,11 @@ export default [
   {
     name: 'migrations:generate',
     ...getOrmConfig(),
-    entities: [join(__dirname, '..', '/**', '/*.entity.{ts,js}')],
+    entities: [join(__dirname, '..', '/*.entity.{js,ts}')],
   },
   {
     name: 'migrations:create-run-revert',
     ...getOrmConfig(),
-    migrations: [join(__dirname, '..', '/migrations', '/*.{ts,js}')],
+    migrations: [join(__dirname, '..', '/migrations')],
   },
 ];
