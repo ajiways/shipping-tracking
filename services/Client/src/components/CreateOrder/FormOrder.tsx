@@ -1,35 +1,33 @@
 import { Button, Col, Form, Input, Row, Typography } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { useActions } from '../../hooks/useActions';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
+import s from './order.module.css';
 
 export const FormOrder: FC = () => {
   const [form] = useForm();
   const { CreateOrder } = useActions();
-  const { id } = useTypedSelector((state) => state.order);
+  const { id, isLoading } = useTypedSelector((state) => state.order);
 
   return (
     <>
       <Row gutter={10}>
         <Form
           form={form}
-          style={{ margin: '30px auto' }}
+          className={s.form}
           name="wrap"
-          labelCol={{
-            flex: '110px'
-          }}
           onFinish={() => {
             CreateOrder(form.getFieldsValue());
           }}
         >
-          <div style={{ marginBottom: '10px', textAlign: 'center' }}>
+          <div className={s.form_name}>
             <Typography.Text> Coordinates Start</Typography.Text>
           </div>
-          <div style={{ display: 'flex' }}>
+          <div className={s.form_content}>
             <Col span={12}>
               <Form.Item
-                style={{ marginBottom: '50px' }}
+                className={s.form_items}
                 name="startLat"
                 rules={[
                   {
@@ -53,10 +51,10 @@ export const FormOrder: FC = () => {
               </Form.Item>
             </Col>
           </div>
-          <div style={{ marginBottom: '10px', textAlign: 'center' }}>
-            <Typography.Text> Coordinates Start</Typography.Text>
+          <div className={s.form_name}>
+            <Typography.Text> Coordinates End</Typography.Text>
           </div>
-          <div style={{ display: 'flex' }}>
+          <div className={s.form_content}>
             <Col span={12}>
               <Form.Item
                 name="endLat"
@@ -83,19 +81,27 @@ export const FormOrder: FC = () => {
             </Col>
           </div>
           <Form.Item>
-            <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
+            <Button
+              loading={isLoading}
+              type="primary"
+              htmlType="submit"
+              className={s.form_btn}
+            >
               Submit
             </Button>
           </Form.Item>
+          {id ? (
+            <div className={s.form_success}>
+              <span className={s.form_success__title}>
+                Заказ: <span className={s.form_success__text}>{id}</span>{' '}
+                успешно создан!
+              </span>
+            </div>
+          ) : (
+            <></>
+          )}
         </Form>
       </Row>
-      {id ? (
-        <Typography.Title style={{ fontSize: '25px', textAlign: 'center' }}>
-          Номер заказа: {id}
-        </Typography.Title>
-      ) : (
-        <></>
-      )}
     </>
   );
 };

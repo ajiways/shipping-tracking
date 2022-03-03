@@ -40,8 +40,8 @@ export const orderReducer = (
     case OrderActionTypes.SEND_ORDER_SUCCES:
       return {
         ...state,
+        isLoading: false,
         loaded: true,
-        isLoading: true,
         error: false,
         id: action.payload.id
       };
