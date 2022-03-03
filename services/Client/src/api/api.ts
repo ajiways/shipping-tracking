@@ -16,8 +16,6 @@ export const ServerAPI = {
   },
 
   async paymentOrder(id: number) {
-    const response = await instance.put('/paid', { id });
-
-    console.log(response);
+    return await instance.put('/paid', { id });
   }
 };

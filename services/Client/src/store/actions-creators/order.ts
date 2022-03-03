@@ -43,9 +43,11 @@ export const CreateOrder = (orderCreate: orderCreate) => {
 export const PaymentConfirm = (id: number) => {
   return async (dispatch: Dispatch<OrderAction>) => {
     try {
-      ServerAPI.paymentOrder(id);
+      dispatch({ type: OrderActionTypes.PAID_ORDER });
+      await ServerAPI.paymentOrder(id);
+      dispatch({ type: OrderActionTypes.PAID_ORDER_SUCCESS });
     } catch (error) {
-      console.log(error);
+      dispatch({ type: OrderActionTypes.PAID_ORDER_ERROR });
     }
   };
 };

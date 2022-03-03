@@ -6,6 +6,7 @@ import {
 
 const initialState: OrderState = {
   order: null,
+  isLoadingPaid: false,
   isLoadingCreate: false,
   isLoading: false,
   loaded: false,
@@ -18,6 +19,11 @@ export const orderReducer = (
   action: OrderAction
 ): OrderState => {
   switch (action.type) {
+    case OrderActionTypes.FETCH_ORDER:
+      return {
+        ...state,
+        isLoading: true
+      };
     case OrderActionTypes.FETCH_ORDER_SUCCESS:
       return {
         ...state,
@@ -26,11 +32,6 @@ export const orderReducer = (
         loaded: true,
         error: false
       };
-    case OrderActionTypes.FETCH_ORDER:
-      return {
-        ...state,
-        isLoading: true
-      };
     case OrderActionTypes.FETCH_ORDER_ERROR:
       return {
         ...state,
@@ -38,25 +39,36 @@ export const orderReducer = (
         isLoading: false,
         error: true
       };
-    case OrderActionTypes.SEND_ORDER_SUCCESS:
-      return {
-        ...state,
-        isLoadingCreate: false,
-        loaded: true,
-        error: false,
-        id: action.payload.id
-      };
     case OrderActionTypes.SEND_ORDER:
       return {
         ...state,
         isLoadingCreate: true
       };
+    case OrderActionTypes.SEND_ORDER_SUCCESS:
+      return {
+        ...state,
+        isLoadingCreate: false,
+        id: action.payload.id
+      };
     case OrderActionTypes.SEND_ORDER_ERROR:
       return {
         ...state,
-        loaded: true,
-        isLoadingCreate: false,
-        error: true
+        isLoadingCreate: false
+      };
+    case OrderActionTypes.PAID_ORDER:
+      return {
+        ...state,
+        isLoadingPaid: true
+      };
+    case OrderActionTypes.PAID_ORDER_SUCCESS:
+      return {
+        ...state,
+        isLoadingPaid: false
+      };
+    case OrderActionTypes.PAID_ORDER_ERROR:
+      return {
+        ...state,
+        isLoadingPaid: false
       };
     default:
       return state;

@@ -1,6 +1,7 @@
 import { Button, Card, Table, Typography } from 'antd';
 import { FC } from 'react';
 import { useActions } from '../../../hooks/useActions';
+import { useTypedSelector } from '../../../hooks/useTypedSelector';
 import { Order } from '../../../types-reducers/order';
 
 interface Props {
@@ -9,6 +10,7 @@ interface Props {
 
 export const WaitingOrder: FC<Props> = ({ order }) => {
   const { id } = order;
+  const { isLoadingPaid } = useTypedSelector((state) => state.order);
   const { PaymentConfirm } = useActions();
   const mapsDiv = document.getElementById('map')!;
   mapsDiv!.className = 'map__hidden';
@@ -62,6 +64,7 @@ export const WaitingOrder: FC<Props> = ({ order }) => {
         <Button
           type="primary"
           size="large"
+          loading={isLoadingPaid}
           style={{ width: '100%', marginTop: '25px' }}
           onClick={() => {
             PaymentConfirm(id);

@@ -12,6 +12,7 @@ export const OrdersComp: FC<PropsOrdersC> = ({ map, query }) => {
   const { order, error, isLoading, loaded } = useTypedSelector(
     (state) => state.order
   );
+
   return (
     <>
       {isLoading ? (
