@@ -32,7 +32,7 @@ export const CreateOrder: FC<Props> = ({ map }) => {
     map,
     position: { lat: 55, lng: 55 }
   });
-  const socket = io.connect('http://localhost:3002');
+  const socket = io.connect('http://localhost:3019');
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((pos) => {
