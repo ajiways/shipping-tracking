@@ -40,9 +40,10 @@ export const CreateOrder = (orderCreate: orderCreate) => {
   return async (dispatch: Dispatch<OrderAction>) => {
     try {
       const response = await ServerAPI.createOrder(orderCreate);
+      const { id } = response;
       dispatch({
         type: OrderActionTypes.SEND_ORDER_SUCCES,
-        payload: { id: response }
+        payload: { id: id }
       });
     } catch (error) {}
   };
