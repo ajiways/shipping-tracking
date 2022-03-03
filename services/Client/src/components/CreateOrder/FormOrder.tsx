@@ -8,7 +8,7 @@ import s from './order.module.css';
 export const FormOrder: FC = () => {
   const [form] = useForm();
   const { CreateOrder } = useActions();
-  const { id, isLoading } = useTypedSelector((state) => state.order);
+  const { id, isLoadingCreate } = useTypedSelector((state) => state.order);
 
   return (
     <>
@@ -82,7 +82,7 @@ export const FormOrder: FC = () => {
           </div>
           <Form.Item>
             <Button
-              loading={isLoading}
+              loading={isLoadingCreate}
               type="primary"
               htmlType="submit"
               className={s.form_btn}

@@ -6,6 +6,7 @@ import {
 
 const initialState: OrderState = {
   order: null,
+  isLoadingCreate: false,
   isLoading: false,
   loaded: false,
   error: false,
@@ -17,7 +18,7 @@ export const orderReducer = (
   action: OrderAction
 ): OrderState => {
   switch (action.type) {
-    case OrderActionTypes.FETCH_ORDER_SUCCES:
+    case OrderActionTypes.FETCH_ORDER_SUCCESS:
       return {
         ...state,
         order: action.payload,
@@ -37,10 +38,10 @@ export const orderReducer = (
         isLoading: false,
         error: true
       };
-    case OrderActionTypes.SEND_ORDER_SUCCES:
+    case OrderActionTypes.SEND_ORDER_SUCCESS:
       return {
         ...state,
-        isLoading: false,
+        isLoadingCreate: false,
         loaded: true,
         error: false,
         id: action.payload.id
@@ -48,13 +49,13 @@ export const orderReducer = (
     case OrderActionTypes.SEND_ORDER:
       return {
         ...state,
-        isLoading: true
+        isLoadingCreate: true
       };
     case OrderActionTypes.SEND_ORDER_ERROR:
       return {
         ...state,
         loaded: true,
-        isLoading: false,
+        isLoadingCreate: false,
         error: true
       };
     default:

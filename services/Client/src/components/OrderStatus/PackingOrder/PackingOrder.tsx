@@ -2,11 +2,7 @@ import { Card, Table, Typography } from 'antd';
 import { FC } from 'react';
 import { Order } from '../../../types-reducers/order';
 
-interface Props {
-  order: Order;
-}
-
-export const PackingOrder: FC<Props> = ({ order }) => {
+export const PackingOrder: FC<PropsPackingOrder> = ({ order }) => {
   const divMap = document.getElementById('map');
   divMap!.className = 'map__hidden';
   const columns = [
@@ -59,3 +55,7 @@ export const PackingOrder: FC<Props> = ({ order }) => {
     </>
   );
 };
+
+interface PropsPackingOrder {
+  order: Order;
+}

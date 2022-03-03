@@ -1,6 +1,7 @@
 export interface OrderState {
   order: Order | null;
   isLoading: boolean;
+  isLoadingCreate: boolean;
   loaded: boolean;
   error: boolean;
   id: number | null;
@@ -8,10 +9,10 @@ export interface OrderState {
 
 export enum OrderActionTypes {
   FETCH_ORDER = 'FETCH_ORDER',
-  FETCH_ORDER_SUCCES = 'FETCH_ORDER_SUCCES',
+  FETCH_ORDER_SUCCESS = 'FETCH_ORDER_SUCCESS',
   FETCH_ORDER_ERROR = 'FETCH_ORDER_ERROR',
   SEND_ORDER = 'SEND_ORDER',
-  SEND_ORDER_SUCCES = 'SEND_ORDER_SUCCES',
+  SEND_ORDER_SUCCESS = 'SEND_ORDER_SUCCESS',
   SEND_ORDER_ERROR = 'SEND_ORDER_ERROR'
 }
 
@@ -23,7 +24,7 @@ interface FetchOrder {
 }
 
 interface FetchOrderSucces {
-  type: OrderActionTypes.FETCH_ORDER_SUCCES;
+  type: OrderActionTypes.FETCH_ORDER_SUCCESS;
   payload: Order;
 }
 
@@ -31,7 +32,7 @@ interface SendOrder {
   type: OrderActionTypes.SEND_ORDER;
 }
 interface SendOrderSucces {
-  type: OrderActionTypes.SEND_ORDER_SUCCES;
+  type: OrderActionTypes.SEND_ORDER_SUCCESS;
   payload: { id: number };
 }
 interface SendOrderError {

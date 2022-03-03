@@ -15,7 +15,7 @@ export const FetchOrder = (id: string) => {
       socket.emit('order.subscribe', id);
       socket.on('watch.order', (data) => {
         dispatch({
-          type: OrderActionTypes.FETCH_ORDER_SUCCES,
+          type: OrderActionTypes.FETCH_ORDER_SUCCESS,
           payload: data
         });
       });
@@ -31,7 +31,7 @@ export const CreateOrder = (orderCreate: orderCreate) => {
       dispatch({ type: OrderActionTypes.SEND_ORDER });
       const id = await ServerAPI.createOrder(orderCreate);
       dispatch({
-        type: OrderActionTypes.SEND_ORDER_SUCCES,
+        type: OrderActionTypes.SEND_ORDER_SUCCESS,
         payload: { id }
       });
     } catch (error) {

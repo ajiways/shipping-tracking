@@ -1,7 +1,7 @@
 import 'antd/dist/antd.min.css';
 import './index.css';
 import { HeaderC } from './components/Header/Header';
-import { MainOrder } from './components/Main/Main';
+import { Main } from './components/Main/Main';
 import { Route, Routes } from 'react-router-dom';
 import { CreateOrder } from './components/CreateOrder/CreateOrder';
 import { useEffect, useState } from 'react';
@@ -28,7 +28,7 @@ export default function App() {
       <HeaderC />
       <div style={{ maxWidth: '1440px', margin: '20px auto' }}>
         <Routes>
-          <Route path="/order/search" element={<MainOrder map={map} />} />
+          <Route path="/order/search" element={<Main map={map} />} />
           <Route path="/order/create" element={<CreateOrder map={map} />} />
         </Routes>
       </div>
