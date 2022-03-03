@@ -4,15 +4,25 @@ import { HeaderC } from './components/Header/Header';
 import { MainOrder } from './components/Main/Main';
 import { Route, Routes } from 'react-router-dom';
 import { CreateOrder } from './components/CreateOrder/CreateOrder';
+import { useEffect, useState } from 'react';
 
 export default function App() {
+  const [position, setPosition] = useState({ lat: 51.77, lng: 55.1 });
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((pos) => {
+      setPosition({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+    });
+  }, []);
   const divMap = document.getElementById('map');
   divMap!.className = 'map__hidden';
   const mapOptions: google.maps.MapOptions = {
-    center: { lat: 51.77, lng: 55.1 },
+    center: position,
     zoom: 12
   };
+
   const map = new google.maps.Map(document.getElementById('map')!, mapOptions);
+
   return (
     <div>
       <HeaderC />

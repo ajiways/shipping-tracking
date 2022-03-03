@@ -1,9 +1,7 @@
 import { Button, Card, Table, Typography } from 'antd';
 import { FC } from 'react';
 import { useActions } from '../../../hooks/useActions';
-import { useTypedSelector } from '../../../hooks/useTypedSelector';
 import { Order } from '../../../types-reducers/order';
-import { OrderStatus } from '../../CreateOrder/CreateOrder';
 
 interface Props {
   order: Order;
