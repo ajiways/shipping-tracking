@@ -9,6 +9,8 @@ interface Props {
 }
 
 export const HandedOrder: FC<Props> = ({ order, map }) => {
+  map.setCenter({ lat: order.startLat, lng: order.startLng });
+
   const mapsDiv = document.getElementById('map')!;
   mapsDiv!.className = 'map';
 

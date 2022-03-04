@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { FormOrder } from './FormOrder';
 
 interface Props {
@@ -7,8 +7,14 @@ interface Props {
 
 export const CreateOrder: FC<Props> = ({ map }) => {
   const divMap = document.getElementById('map');
+  const [position, setPosition] = useState({ lat: 51.77, lng: 55.1 });
 
   useEffect(() => {
+    // Запрос на получение геолокации
+    navigator.geolocation.getCurrentPosition((pos) => {
+      setPosition({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+    });
+
     let infoWindow = new google.maps.InfoWindow({});
     divMap!.className = 'map';
     const listener = map.addListener('click', (mapsMouseEvent) => {
@@ -27,6 +33,8 @@ export const CreateOrder: FC<Props> = ({ map }) => {
       listener.remove();
     };
   }, []);
+
+  map.setCenter(position);
 
   return (
     <>
