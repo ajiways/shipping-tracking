@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { join } from 'path';
+import { GRPC_HOST, MARKET_SERVICE } from './constants/constants';
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
@@ -9,9 +10,9 @@ async function bootstrap() {
     {
       transport: Transport.GRPC,
       options: {
-        package: 'market_service',
+        package: MARKET_SERVICE,
         protoPath: join(__dirname, '../../contracts/orders.proto'),
-        url: '127.0.0.1:3004',
+        url: GRPC_HOST,
       },
     },
   );

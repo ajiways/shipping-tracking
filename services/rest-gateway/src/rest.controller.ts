@@ -1,6 +1,6 @@
 import { Body, Controller, Post, Put } from '@nestjs/common';
+import { ORDER_ID, POST_CREATE, POST_FIND, PUT_PAID } from './constants/constants';
 import {
-  ChangeStatusRequest,
   FindOrderRequest,
 } from './orderService.interface';
 import { RestService } from './rest.service';
@@ -9,20 +9,18 @@ import { RestService } from './rest.service';
 export class RestController {
   constructor(private readonly restService: RestService) {}
 
-  @Post('/create')
+  @Post(POST_CREATE)
   async createOrder(@Body() data) {
-    console.log(data);
     return this.restService.createOrder(data);
   }
 
-  @Post('/find')
+  @Post(POST_FIND)
   async findOrder(@Body() data: FindOrderRequest) {
     return this.restService.findOrder(data);
   }
 
-  @Put('/paid')
-  async changeStatus(@Body('id') id: number) {
-    console.log(id);
+  @Put(PUT_PAID)
+  async changeStatus(@Body(ORDER_ID) id: number) {
     return this.restService.paid(id);
   }
 }

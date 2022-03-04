@@ -1,10 +1,10 @@
-import {MigrationInterface, QueryRunner} from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class OrderEntity1646167021245 implements MigrationInterface {
-    name = 'OrderEntity1646167021245'
+  name = 'OrderEntity1646167021245';
 
-    public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
             CREATE TYPE "public"."order_order_status_enum" AS ENUM(
                 'Ожидание подтверждения оплаты',
                 'Заказ собирается',
@@ -12,7 +12,7 @@ export class OrderEntity1646167021245 implements MigrationInterface {
                 'Заказ доставлен'
             )
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             CREATE TABLE "order" (
                 "id" SERIAL NOT NULL,
                 "order_status" "public"."order_order_status_enum" NOT NULL DEFAULT 'Ожидание подтверждения оплаты',
@@ -23,15 +23,14 @@ export class OrderEntity1646167021245 implements MigrationInterface {
                 CONSTRAINT "PK_1031171c13130102495201e3e20" PRIMARY KEY ("id")
             )
         `);
-    }
+  }
 
-    public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
             DROP TABLE "order"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             DROP TYPE "public"."order_order_status_enum"
         `);
-    }
-
+  }
 }

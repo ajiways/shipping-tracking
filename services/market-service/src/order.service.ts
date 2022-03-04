@@ -1,9 +1,10 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
-import { Client, ClientKafka, Transport } from '@nestjs/microservices';
+import { ClientKafka } from '@nestjs/microservices';
 import { OrderDto } from './dto/order.dto';
 import { OrderEntity, OrderStatus } from './order.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { ORDER_CREATE, ORDER_CHANGE, ORDER_FIND, NOT_EXIST, KAFKA } from './constants/constants';
 
 @Injectable()
 export class OrderService implements OnModuleInit {
@@ -12,7 +13,7 @@ export class OrderService implements OnModuleInit {
     private readonly orderRepository: Repository<OrderEntity>,
   ) {}
 
-  @Inject('KAFKA')
+  @Inject(KAFKA)
   private client: ClientKafka;
 
   async onModuleInit() {
@@ -28,7 +29,7 @@ export class OrderService implements OnModuleInit {
     });
     await order.save();
 
-    this.client.emit('order.create', { order: order });
+    this.client.emit(ORDER_CREATE, { order: order });
     return order;
   }
 
@@ -38,33 +39,32 @@ export class OrderService implements OnModuleInit {
     });
 
     if (!candidate) {
-      //..
+      return NOT_EXIST;
     }
 
     const updatedOrder = await this.orderRepository
       .merge(candidate, { orderStatus: OrderStatus.packingOrder })
       .save();
 
-    this.client.emit('order.change', { order: updatedOrder });
+    this.client.emit(ORDER_CHANGE, { order: updatedOrder });
 
     return updatedOrder;
   }
 
   async handed(id: number) {
-    console.log('HANDED', id);
     const candidate = await this.orderRepository.findOne({
       where: { id },
     });
 
     if (!candidate) {
-      //..
+      return NOT_EXIST;
     }
 
     const updatedOrder = await this.orderRepository
       .merge(candidate, { orderStatus: OrderStatus.handedToCourier })
       .save();
 
-    this.client.emit('order.change', { order: updatedOrder });
+    this.client.emit(ORDER_CHANGE, { order: updatedOrder });
 
     return updatedOrder;
   }
@@ -75,19 +75,19 @@ export class OrderService implements OnModuleInit {
     });
 
     if (!candidate) {
-      //..
+      return NOT_EXIST;
     }
 
     const updatedOrder = await this.orderRepository
       .merge(candidate, { orderStatus: OrderStatus.deliveredOrder })
       .save();
 
-    this.client.emit('order.change', { order: updatedOrder });
+    this.client.emit(ORDER_CHANGE, { order: updatedOrder });
 
     return updatedOrder;
   }
 
   async findOrder(data: OrderDto) {
-    this.client.emit('order.find', data);
+    this.client.emit(ORDER_FIND, data);
   }
 }

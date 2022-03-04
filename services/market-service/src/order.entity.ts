@@ -1,4 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn, BaseEntity } from 'typeorm';
+import { ENTITY_ORDER } from './constants/constants';
 
 export enum OrderStatus {
   waitingOrder = 'Ожидание подтверждения оплаты',
@@ -7,7 +8,7 @@ export enum OrderStatus {
   deliveredOrder = 'Заказ доставлен',
 }
 
-@Entity('order')
+@Entity(ENTITY_ORDER)
 export class OrderEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;

@@ -1,20 +1,18 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { Client, ClientGrpc, Transport } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
-import {
-  FindOrderRequest,
-  MarketService,
-} from './orderService.interface';
+import { FindOrderRequest, MarketService } from './orderService.interface';
 import { resolve } from 'path';
+import { GRPC_HOST, MARKET_SERVICE, MARKET_SERVICE_METHOD } from './constants/constants';
 
 @Injectable()
 export class RestService implements OnModuleInit {
   @Client({
     transport: Transport.GRPC,
     options: {
-      package: 'market_service',
+      package: MARKET_SERVICE,
       protoPath: resolve(__dirname, '../../contracts/orders.proto'),
-      url: '127.0.0.1:3004',
+      url: GRPC_HOST,
     },
   })
   private grpcClient: ClientGrpc;
@@ -22,14 +20,11 @@ export class RestService implements OnModuleInit {
 
   onModuleInit() {
     this.marketService =
-      this.grpcClient.getService<MarketService>('MarketService');
+      this.grpcClient.getService<MarketService>(MARKET_SERVICE_METHOD);
   }
 
   async createOrder(data) {
-    console.log('Order created');
     const res = await lastValueFrom(this.marketService.createOrder(data));
-
-    console.log(res);
 
     return res;
   }

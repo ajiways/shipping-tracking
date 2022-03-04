@@ -1,0 +1,14 @@
+export const GRPC_HOST = '127.0.0.1:3004';
+export const MARKET_SERVICE = 'market_service';
+export const ORDER_CREATE = 'order.create'
+export const ORDER_CHANGE = 'order.change'
+export const ORDER_FIND = 'order.find'
+export const NOT_EXIST = "This order doesn't exist"
+export const KAFKA = 'KAFKA'
+export const MARKET_SERVICE_METHOD = 'MarketService'
+export const GRPC_CREATE = 'CreateOrder'
+export const GRPC_FIND = 'FindOrder' 
+export const DELIVIRIED_STATUS = 'Deliviried'
+export const HANDED_STATUS = 'Handed'
+export const PAID_STATUS = 'Paid'
+export const ENTITY_ORDER = 'order'
