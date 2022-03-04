@@ -49,17 +49,20 @@ export const orderReducer = (
     case OrderActionTypes.SEND_ORDER:
       return {
         ...state,
+        isLoadingPaid: false,
         isLoadingCreate: true
       };
     case OrderActionTypes.SEND_ORDER_SUCCESS:
       return {
         ...state,
         isLoadingCreate: false,
+        isLoadingPaid: false,
         id: action.payload.id
       };
     case OrderActionTypes.SEND_ORDER_ERROR:
       return {
         ...state,
+        isLoadingPaid: false,
         isLoadingCreate: false
       };
     case OrderActionTypes.PAID_ORDER:

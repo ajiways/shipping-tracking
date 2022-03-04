@@ -1,5 +1,5 @@
 import { Typography } from 'antd';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import { Order } from '../../../types-reducers/order';
 import { lineSymbol } from '../../common/polyline';
 

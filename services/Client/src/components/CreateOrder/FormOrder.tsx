@@ -11,7 +11,7 @@ export const FormOrder: FC = () => {
   const { id, isLoadingCreate } = useTypedSelector((state) => state.order);
 
   return (
-    <>
+    <div>
       <Row gutter={10}>
         <Form
           form={form}
@@ -102,6 +102,6 @@ export const FormOrder: FC = () => {
           )}
         </Form>
       </Row>
-    </>
+    </div>
   );
 };
