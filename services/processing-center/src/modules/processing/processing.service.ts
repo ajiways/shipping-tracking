@@ -5,6 +5,7 @@ import {
   COORDINATES_KAFKA,
   COORDINATES_GRPC,
   MARKET_SERVICE,
+  GET_COORDINATES_KAFKA,
 } from './../../constants/constants';
 import { Inject, Injectable } from '@nestjs/common';
 import { lastValueFrom } from 'rxjs';
@@ -30,6 +31,6 @@ export class ProcessingService {
   }
 
   async sendCoordinates(order: OrderCoordinates) {
-    this.kafkaClient.emit('get.coordinates', order);
+    this.kafkaClient.emit(GET_COORDINATES_KAFKA, order);
   }
 }

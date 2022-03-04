@@ -1,4 +1,10 @@
-import { OrderCoordinates, Order, OrderStatus } from './../../interface/order';
+import {
+  COORDINATES_END,
+  COORDINATES_GENERATE,
+  COORDINATES_TO_SERVER,
+  WS_PORT,
+} from './../../constants/constants';
+import { OrderCoordinates, Order } from './../../interface/order';
 import { ProcessingService } from './../processing/processing.service';
 import { Logger, Inject, forwardRef } from '@nestjs/common';
 import {
@@ -11,7 +17,7 @@ import {
 } from '@nestjs/websockets';
 import { Socket, Server } from 'socket.io';
 
-@WebSocketGateway(3002, { cors: true })
+@WebSocketGateway(WS_PORT, { cors: true })
 export class GenerateGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
@@ -24,21 +30,17 @@ export class GenerateGateway
 
   private logger: Logger = new Logger('AppGateway');
 
-  @SubscribeMessage('CoordinatesToServer')
-  handleMessage(client: Socket, payload: OrderCoordinates): void {
-    console.log(payload);
+  @SubscribeMessage(COORDINATES_TO_SERVER)
+  handleMessage(payload: OrderCoordinates): void {
     this.processingService.sendCoordinates(payload);
   }
 
-  @SubscribeMessage('CoordinatesEnd')
-  handleMessageCoordinates(client: Socket, payload: OrderCoordinates): void {
-    console.log(payload, 'СМЕНА 1');
-
+  @SubscribeMessage(COORDINATES_END)
+  handleMessageCoordinates(payload: OrderCoordinates): void {
     this.processingService.deliviried(payload.id);
   }
   orderToClient(order: Order): void {
-    console.log(order);
-    this.server.emit('generateCoords', order);
+    this.server.emit(COORDINATES_GENERATE, order);
   }
 
   afterInit(server: Server) {

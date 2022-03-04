@@ -1,9 +1,15 @@
 import { join } from 'path';
-import { BROKER_HOST, BROKER_PORT } from './../../constants/config.contsants';
 import {
-  NAVIGATION_SERVICE,
+  BROKER_HOST,
+  BROKER_PORT,
+  GRPC_HOST,
+  GRPC_PORT,
+} from './../../constants/config.contsants';
+import {
   COORDINATES_KAFKA,
   COORDINATES_GRPC,
+  NAVIGATION_PROCESSING,
+  MARKET_SERVICE_GRPC,
 } from './../../constants/constants';
 import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
@@ -21,7 +27,7 @@ import { GenerateGateway } from './generate.service';
             brokers: [`${BROKER_HOST}:${BROKER_PORT}`],
           },
           consumer: {
-            groupId: 'navigation.processing',
+            groupId: NAVIGATION_PROCESSING,
           },
         },
       },
@@ -29,9 +35,9 @@ import { GenerateGateway } from './generate.service';
         name: COORDINATES_GRPC,
         transport: Transport.GRPC,
         options: {
-          package: 'market_service',
+          package: MARKET_SERVICE_GRPC,
           protoPath: join(__dirname, './../../../contracts/orders.proto'),
-          url: '127.0.0.1:3004',
+          url: `${GRPC_HOST}:${GRPC_PORT}`,
         },
       },
     ]),

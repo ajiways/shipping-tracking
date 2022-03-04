@@ -4,6 +4,7 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 import { GoogleMap } from 'src/api/api';
 import { ProcessingService } from './processing.service';
 import { GenerateGateway } from '../generate/generate.service';
+import { ORDER_CHANGE } from 'src/constants/constants';
 
 @Controller()
 export class ProcessingController {
@@ -12,9 +13,8 @@ export class ProcessingController {
     private readonly generateGateway: GenerateGateway,
   ) {}
 
-  @MessagePattern('order.change')
+  @MessagePattern(ORDER_CHANGE)
   async generate(@Payload('value') data: { order: Order }) {
-    console.log('WORKS');
     if (data.order.orderStatus === OrderStatus.packingOrder) {
       const response = await GoogleMap.getPolyline(
         { lat: data.order.startLat, lng: data.order.startLng },

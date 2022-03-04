@@ -1,7 +1,6 @@
 import axios from 'axios';
+import { API_KEY } from './../constants/constants';
 import { LatLang } from './latlang';
-
-const API_KEY = 'AIzaSyAnolHAY1cSxTBCexjTsKHVXkn8lgWp1is';
 
 const instanceMap = axios.create({
   baseURL: 'https://maps.googleapis.com/maps/api/directions/json?',
