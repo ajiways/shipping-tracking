@@ -1,6 +1,7 @@
 FROM node:16.14.0-alpine 
 
 COPY /src /app/src
+COPY /contracts /app/contracts
 COPY ./package.json /app/package.json
 COPY ./package-lock.json /app/package-lock.json
 COPY ./tsconfig.json /app/tsconfig.json
