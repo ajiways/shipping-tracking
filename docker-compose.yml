@@ -8,6 +8,8 @@ services:
          - 2181:2181
       environment:
          - ALLOW_ANONYMOUS_LOGIN=yes
+      networks:
+         - grpc
 
    kafka:
       image: docker.io/niks123123/kafka:2.7.0
@@ -22,18 +24,25 @@ services:
          KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
          KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
          ALLOW_PLAINTEXT_LISTENER: yes
+
+      networks:
+         - grpc
       depends_on:
          - zookeeper
 
-   db:
+   navdb:
       image: postgres:latest
 
       environment:
          - POSTGRES_PASSWORD=postgres
          - POSTGRES_USER=postgres
+         - POSTGRES_DB=navdb
 
       ports:
-         - "5555:5432"
+         - "5556:5432"
+
+      networks:
+         - grpc
 
       healthcheck:
          test: ["CMD-SHELL", "pg_isready -U postgres"]
@@ -47,7 +56,9 @@ services:
          dockerfile: Dockerfile
 
       ports:
-         - "3222:3000"
+         - "3222:3019"
+      networks:
+         - grpc
 
       restart: always
 
@@ -57,13 +68,18 @@ services:
          dockerfile: Dockerfile
 
       ports:
-         - "3223:3000"
+         - "3223:3332"
+
+      networks:
+         - grpc
 
       depends_on:
-         db:
+         navdb:
             condition: service_healthy
 
       links:
-         - db
+         - navdb
 
-      restart: always
+networks:
+   grpc:
+      driver: bridge
