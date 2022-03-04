@@ -31,12 +31,12 @@ export class GenerateGateway
   private logger: Logger = new Logger('AppGateway');
 
   @SubscribeMessage(COORDINATES_TO_SERVER)
-  handleMessage(payload: OrderCoordinates): void {
+  handleMessage(client: Socket, payload: OrderCoordinates): void {
     this.processingService.sendCoordinates(payload);
   }
 
   @SubscribeMessage(COORDINATES_END)
-  handleMessageCoordinates(payload: OrderCoordinates): void {
+  handleMessageCoordinates(client: Socket, payload: OrderCoordinates): void {
     this.processingService.deliviried(payload.id);
   }
   orderToClient(order: Order): void {

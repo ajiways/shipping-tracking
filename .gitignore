@@ -10,3 +10,7 @@ services/Client/node_modules
 services/Client/build
 services/processing-center/dist
 services/processing-center/node_modules
+services/rest-gateway/dist
+services/rest-gateway/node_modules
+services/market-service/dist
+services/market-service/node_modules
