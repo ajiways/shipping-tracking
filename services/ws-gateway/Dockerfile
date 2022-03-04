@@ -8,7 +8,7 @@ COPY ./tsconfig.json /app/tsconfig.json
 
 WORKDIR /app
 
-RUN npm i
+RUN npm ci
 RUN npx tsc
 
 
