@@ -38,6 +38,7 @@ export const PackingOrder: FC<PropsPackingOrder> = ({ order }) => {
   return (
     <>
       <Card
+        headStyle={{ color: '#2f54eb' }}
         title={`Заказ номер: ${order.id} - ${order.orderStatus}`}
         style={{ width: '40%', margin: '20px auto 20px' }}
       >

@@ -10,7 +10,9 @@ interface Props {
 
 export const WaitingOrder: FC<Props> = ({ order }) => {
   const { id } = order;
-  const { isLoadingPaid } = useTypedSelector((state) => state.order);
+  const { isLoadingPaid, isOrderPaid } = useTypedSelector(
+    (state) => state.order
+  );
   const { PaymentConfirm } = useActions();
   const mapsDiv = document.getElementById('map')!;
   mapsDiv!.className = 'map__hidden';
@@ -48,6 +50,7 @@ export const WaitingOrder: FC<Props> = ({ order }) => {
   return (
     <>
       <Card
+        headStyle={{ color: '#2f54eb' }}
         title={`Заказ номер: ${order.id} - ${order.orderStatus}`}
         style={{ width: '40%', margin: '20px auto 20px' }}
       >
@@ -56,22 +59,26 @@ export const WaitingOrder: FC<Props> = ({ order }) => {
           dataSource={data}
           size="middle"
           pagination={false}
-        >
-          <Typography.Text>
-            Координаты начала: {order.startLat}, {order.startLng}
-          </Typography.Text>
-        </Table>
-        <Button
-          type="primary"
-          size="large"
-          loading={isLoadingPaid}
-          style={{ width: '100%', marginTop: '25px' }}
-          onClick={() => {
-            PaymentConfirm(id);
-          }}
-        >
-          Оплатить
-        </Button>
+        ></Table>
+        {isOrderPaid ? (
+          <div style={{ textAlign: 'center', marginTop: '10px' }}>
+            <Typography.Text style={{ fontSize: '23px', color: '#10be16' }}>
+              Заказ оплачен
+            </Typography.Text>
+          </div>
+        ) : (
+          <Button
+            type="primary"
+            size="large"
+            loading={isLoadingPaid}
+            style={{ width: '100%', marginTop: '25px' }}
+            onClick={() => {
+              PaymentConfirm(id);
+            }}
+          >
+            Оплатить
+          </Button>
+        )}
       </Card>
     </>
   );

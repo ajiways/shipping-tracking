@@ -3,6 +3,7 @@ export interface OrderState {
   isLoading: boolean;
   isLoadingCreate: boolean;
   isLoadingPaid: boolean;
+  isOrderPaid: boolean;
   loaded: boolean;
   error: boolean;
   id: number | null;

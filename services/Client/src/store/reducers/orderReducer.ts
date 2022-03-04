@@ -9,6 +9,7 @@ const initialState: OrderState = {
   isLoadingPaid: false,
   isLoadingCreate: false,
   isLoading: false,
+  isOrderPaid: false,
   loaded: false,
   error: false,
   id: null
@@ -58,16 +59,19 @@ export const orderReducer = (
     case OrderActionTypes.PAID_ORDER:
       return {
         ...state,
-        isLoadingPaid: true
+        isLoadingPaid: true,
+        isOrderPaid: false
       };
     case OrderActionTypes.PAID_ORDER_SUCCESS:
       return {
         ...state,
-        isLoadingPaid: false
+        isLoadingPaid: false,
+        isOrderPaid: true
       };
     case OrderActionTypes.PAID_ORDER_ERROR:
       return {
         ...state,
+        isOrderPaid: false,
         isLoadingPaid: false
       };
     default:
