@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package market_service;
+
+service MarketService {
+  rpc CreateOrder (CreateOrderRequest)
+      returns (CreateOrderResponse);
+  rpc FindOrder (FindOrderRequest)
+      returns (FindOrderResponse);
+  rpc Deliviried (id)
+      returns (UpdatedOrder);
+  rpc Handed(id)
+      returns (UpdatedOrder);
+  rpc Paid(id)
+      returns (UpdatedOrder);
+}
+
+message id {
+  uint32 id = 1;
+}
+
+message CreateOrderRequest {
+  uint32 id = 1;
+  string orderStatus = 2;
+  float startLat = 3;
+  float startLng = 4;
+  float endLat = 5;
+  float endLng = 6;
+}
+
+message UpdatedOrder { 
+  uint32 id = 1;
+  string orderStatus = 2;
+  float startLat = 3;
+  float startLng = 4;
+  float endLat = 5;
+  float endLng = 6;
+}
+
+message CreateOrderResponse {
+  uint32 id = 1;
+}
+
+message ChangeStatusRequest {
+  uint32 id = 1;
+  string orderStatus = 2;
+}
+
+message ChangeStatusResponse {
+  uint32 id = 1;
+  string orderStatus = 2;
+}
+
+message FindOrderRequest {
+  uint32 id = 1;
+}
+
+message FindOrderResponse {
+  uint32 id = 1;
+  string orderStatus = 2;
+  float startLat = 3;
+  float startLng = 4;
+  float endLat = 5;
+  float endLng = 6;
+}
