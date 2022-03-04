@@ -4,6 +4,8 @@ import {
   TypeOrmModuleAsyncOptions,
   TypeOrmModuleOptions,
 } from '@nestjs/typeorm';
+import { config } from 'dotenv';
+config();
 
 export function getOrmConfig(): TypeOrmModuleOptions {
   const config = new ConfigService();

@@ -11,7 +11,7 @@ async function bootstrap() {
       transport: Transport.GRPC,
       options: {
         package: MARKET_SERVICE,
-        protoPath: join(__dirname, '../../contracts/orders.proto'),
+        protoPath: join(__dirname, '../contracts/orders.proto'),
         url: GRPC_HOST,
       },
     },

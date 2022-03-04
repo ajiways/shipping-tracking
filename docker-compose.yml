@@ -1,1 +1,50 @@
+version: "3.1"
 
+services:
+   rest:
+      build:
+         context: ./services/rest-gateway
+         dockerfile: Dockerfile
+      ports:
+         - "4002:4000"
+      networks:
+         - grpc
+      restart: always
+
+   market:
+      build:
+         context: ./services/market-service
+         dockerfile: Dockerfile
+      ports:
+         - "4004:4000"
+      depends_on:
+         marketdb:
+            condition: service_healthy
+      links:
+         - marketdb
+      networks:
+         - grpc
+      restart: always
+
+   marketdb:
+      image: postgres:latest
+      environment:
+         - POSTGRES_USER=postgres
+         - POSTGRES_PASSWORD=postgres
+         - POSTGRES_DB=marketdb
+
+      ports:
+         - "5555:5432"
+
+      networks:
+         - grpc
+
+      healthcheck:
+         test: ["CMD-SHELL", "pg_isready -U postgres"]
+         interval: 10s
+         timeout: 10s
+         retries: 5
+
+networks:
+   grpc:
+      driver: bridge

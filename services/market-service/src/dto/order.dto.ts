@@ -1,5 +1,5 @@
 import { IsNumber, IsString, Min } from 'class-validator';
-import { OrderStatus } from 'src/order.entity';
+import { OrderStatus } from '../order.entity';
 
 export class OrderDto {
   @IsNumber()

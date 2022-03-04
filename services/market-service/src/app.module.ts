@@ -3,6 +3,12 @@ import { ConfigModule } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfigAsync } from './config/typeorm';
+import {
+  KAFKA,
+  KAFKA_HOST,
+  KAFKA_PORT,
+  MARKET_NAVIGATION,
+} from './constants/constants';
 import { OrderController } from './order.controller';
 import { OrderEntity } from './order.entity';
 import { OrderService } from './order.service';
@@ -12,14 +18,14 @@ import { OrderService } from './order.service';
     TypeOrmModule.forRootAsync(typeOrmConfigAsync),
     ClientsModule.register([
       {
-        name: 'KAFKA',
+        name: KAFKA,
         transport: Transport.KAFKA,
         options: {
           client: {
-            brokers: ['localhost:9094'],
+            brokers: [`${KAFKA_HOST}:${KAFKA_PORT}`],
           },
           consumer: {
-            groupId: 'navigation.market',
+            groupId: MARKET_NAVIGATION,
           },
         },
       },
