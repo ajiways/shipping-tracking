@@ -23,19 +23,25 @@ export const orderReducer = (
     case OrderActionTypes.FETCH_ORDER:
       return {
         ...state,
-        isLoading: true
+        isLoading: true,
+        isLoadingPaid: false,
+        isOrderPaid: false
       };
     case OrderActionTypes.FETCH_ORDER_SUCCESS:
       return {
         ...state,
         order: action.payload,
         isLoading: false,
+        isLoadingPaid: false,
+        isOrderPaid: false,
         loaded: true,
         error: false
       };
     case OrderActionTypes.FETCH_ORDER_ERROR:
       return {
         ...state,
+        isLoadingPaid: false,
+        isOrderPaid: false,
         loaded: true,
         isLoading: false,
         error: true
