@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package nav_service;
+
+service NavigationService {
+  rpc watchOrder(watchRequest)
+    returns (stream watchResponse);
+  rpc connectionClose(closeRequest)
+    returns (closeResponse);
+}
+
+message closeRequest {
+  uint32 id = 1;
+}
+
+message closeResponse {
+  string message = 1;
+}
+
+
+message watchRequest {
+  uint32 id = 1;
+}
+
+message watchResponse {
+  uint32 id = 1;
+  string orderStatus = 2;
+  float startLat = 3;
+  float startLng = 4;
+  float endLat = 5;
+  float endLng = 6;
+  optional float currentLat = 7;
+  optional float currentLng = 8;
+}
