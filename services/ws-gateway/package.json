@@ -1,5 +1,5 @@
 {
-  "name": "nav-service",
+  "name": "domashka-dostavka",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -18,11 +18,7 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
-    "typeorm:cli": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli -f src/config/typeorm-cli.ts",
-    "migration:generate": "npm run typeorm:cli -- migration:generate -p -c migrations:generate -n",
-    "migration:run": "npm run typeorm:cli -- migration:run -c migrations:create-run-revert",
-    "migration:revert": "npm run typeorm:cli -- migration:revert -c migrations:create-run-revert"
+    "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.5.6",
@@ -32,16 +28,14 @@
     "@nestjs/core": "^8.0.0",
     "@nestjs/microservices": "^8.3.1",
     "@nestjs/platform-express": "^8.0.0",
-    "@nestjs/typeorm": "^8.0.3",
-    "@types/pg": "^8.6.4",
+    "@nestjs/platform-socket.io": "^8.3.1",
+    "@nestjs/websockets": "^8.3.1",
+    "@types/dotenv": "^8.2.0",
+    "dotenv": "^16.0.0",
     "kafkajs": "^1.16.0",
-    "pg": "^8.7.3",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^7.5.4",
-    "typeorm": "^0.2.44",
-    "typeorm-cli": "^1.0.7",
-    "typeorm-naming-strategies": "^3.0.0"
+    "rxjs": "^7.2.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",

@@ -29,11 +29,3 @@ export class Order extends BaseEntity {
   @Column({ type: 'float' })
   endLng: number;
 }
-
-interface orderCoordinates {
-  id: number;
-  startLat: number;
-  startLng: number;
-  endLat: number;
-  endLng: number;
-}

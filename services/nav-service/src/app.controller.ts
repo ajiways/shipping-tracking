@@ -1,7 +1,14 @@
 import { Controller } from '@nestjs/common';
 import { GrpcMethod, MessagePattern, Payload } from '@nestjs/microservices';
 import { Observable, ReplaySubject } from 'rxjs';
-import { NAVIGATION_SERVICE } from './misc/constants';
+import {
+  CONNECTION_CLOSE,
+  GET_COORDINATES,
+  NAVIGATION_SERVICE,
+  ORDER_CHANGE,
+  ORDER_CREATE,
+  WATCH_ORDER,
+} from './misc/constants';
 import { AppService } from './app.service';
 import {
   CloseRequest,
@@ -21,26 +28,24 @@ export class AppController {
     ReplaySubject<WatchResponse>
   >();
 
-  @GrpcMethod(NAVIGATION_SERVICE, 'watchOrder')
+  @GrpcMethod(NAVIGATION_SERVICE, WATCH_ORDER)
   async getOrder(data: WatchRequest): Promise<Observable<WatchResponse>> {
     const order = await this.appService.getOrder(data.id);
 
     const rxResponse = new ReplaySubject<WatchResponse>();
 
     if (!order) {
-      console.log('ОРДЕРА НЕТ');
-      rxResponse.error({ message: 'ОРДЕРА НЕТУ ТАКОГО' });
+      rxResponse.error({ message: 'Такого ордера нет' });
       return;
     }
-    console.log('AFTER CHECK', order);
+
     rxResponse.next(order);
     this.connections.set(order.id, rxResponse);
     return rxResponse;
   }
 
-  @GrpcMethod(NAVIGATION_SERVICE, 'connectionClose')
+  @GrpcMethod(NAVIGATION_SERVICE, CONNECTION_CLOSE)
   closeConnection(data: CloseRequest): Observable<CloseResponse> {
-    console.log('DATA CLOSE', data.id);
     const candidate = this.connections.get(data.id);
 
     if (!candidate) {
@@ -52,7 +57,7 @@ export class AppController {
     return new Observable((sub) => sub.next({ message: 'Закрыто' }));
   }
 
-  @MessagePattern('get.coordinates')
+  @MessagePattern(GET_COORDINATES)
   handleCoordinates(@Payload('value') data: OrderInterface) {
     const candidate = this.connections.get(data.id);
 
@@ -63,12 +68,12 @@ export class AppController {
     candidate.next(data);
   }
 
-  @MessagePattern('order.create')
+  @MessagePattern(ORDER_CREATE)
   saveOrder(@Payload('value') data: { order: OrderInterface }) {
     this.appService.saveOrder(data.order);
   }
 
-  @MessagePattern('order.change')
+  @MessagePattern(ORDER_CHANGE)
   handleStatusChange(@Payload('value') data: { order: OrderInterface }) {
     if (data.order.orderStatus === OrderStatus.deliveredOrder) {
       const candidate = this.connections.get(data.order.id);

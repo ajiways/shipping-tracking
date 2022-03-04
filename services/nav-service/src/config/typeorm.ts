@@ -1,5 +1,5 @@
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
-import { ConfigService } from '@nestjs/config';
+
 import {
   TypeOrmModuleAsyncOptions,
   TypeOrmModuleOptions,

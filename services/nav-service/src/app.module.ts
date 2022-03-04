@@ -1,24 +1,21 @@
 import { Module } from '@nestjs/common';
-import { ClientsModule, Transport } from '@nestjs/microservices';
-import { resolve } from 'path';
+import { ConfigModule } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { typeOrmConfigAsync } from './config/typeorm';
+import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { WebSocketController } from './websocket.controller';
+import { OrderService } from './order.service';
+import { Order } from './order.entity';
 
 @Module({
   imports: [
-    ClientsModule.register([
-      {
-        name: 'grpc',
-        transport: Transport.GRPC,
-        options: {
-          package: 'nav_service',
-          protoPath: resolve(__dirname, '../proto/service.proto'),
-          url: `127.0.0.1:3098`,
-        },
-      },
-    ]),
+    TypeOrmModule.forRootAsync(typeOrmConfigAsync),
+    TypeOrmModule.forFeature([Order]),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
   ],
-  controllers: [],
-  providers: [AppService, WebSocketController],
+  controllers: [AppController],
+  providers: [AppService, OrderService],
 })
 export class AppModule {}
