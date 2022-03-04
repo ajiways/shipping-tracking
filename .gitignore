@@ -1,5 +1,12 @@
-./services/ws-gateway/dist
-./services/ws-gateway/node_modules
-
-./services/nav-service/dist
-./services/nav-service/node_modules
+services/ws-gateway/dist
+services/ws-gateway/node_modules
+services/nav-service/dist
+services/nav-service/node_modules
+services/generateClient/dist
+services/generateClient/node_modules
+services/generateClient/build
+services/Client/dist
+services/Client/node_modules
+services/Client/build
+services/processing-center/dist
+services/processing-center/node_modules

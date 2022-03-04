@@ -1,0 +1,38 @@
+.form{
+  margin: 30px auto;
+}
+
+.form_name{
+  margin-bottom: 5px;
+  font-size: 17px;
+  font-weight: 500;
+  text-align: left;
+}
+
+.form_items{
+  margin-bottom: 25px;
+}
+
+.form_content{
+  display: flex;
+}
+
+.form_btn{
+  width: 50%;
+  margin: 0 0 0 25%;
+}
+
+.form_success{
+  text-align: center;
+}
+
+.form_success__text {
+  font-size: 35px;
+  font-weight: 700;
+  color: #597ef7;
+}
+
+.form_success__title{
+  font-size: 30px;
+  font-weight: 200;
+}
