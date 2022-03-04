@@ -1,0 +1,25 @@
+version: "3.1"
+
+services:
+
+  client:
+      build:
+         context: ./Services/Client
+         dockerfile: Dockerfile
+      ports:
+          - "666:80"
+      restart: always
+  generate: 
+      build:
+        context: ./Services/generateClient
+        dockerfile: Dockerfile
+      ports:
+          - "777:80"
+      restart: always
+  processing: 
+      build:
+        context: ./Services/processing-center
+        dockerfile: Dockerfile
+      ports:
+          - "3002:3002"
+      restart: always

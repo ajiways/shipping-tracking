@@ -1,10 +1,10 @@
 import { Order, OrderStatus, OrderToWS } from './../../interface/order';
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { GoogleMap } from 'src/api/api';
+import { GoogleMap } from '../../api/api';
 import { ProcessingService } from './processing.service';
 import { GenerateGateway } from '../generate/generate.service';
-import { ORDER_CHANGE } from 'src/constants/constants';
+import { ORDER_CHANGE } from '../../constants/constants';
 
 @Controller()
 export class ProcessingController {

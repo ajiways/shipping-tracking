@@ -1,6 +1,7 @@
-FROM node:16.14.0-alpine 
+FROM node:12.18.1-alpine
 
 COPY /src /app/src
+COPY /contracts /app/contracts
 COPY ./.env /app/dist/.env
 COPY ./package.json /app/package.json
 COPY ./package-lock.json /app/package-lock.json
