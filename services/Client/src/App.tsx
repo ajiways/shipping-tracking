@@ -4,7 +4,7 @@ import { HeaderC } from './components/Header/Header';
 import { Main } from './components/Main/Main';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { CreateOrder } from './components/CreateOrder/CreateOrder';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 export default function App() {
   const mapOptions: google.maps.MapOptions = {
