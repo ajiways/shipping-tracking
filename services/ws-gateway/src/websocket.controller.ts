@@ -1,14 +1,13 @@
 import { Inject } from '@nestjs/common';
-import { Server } from 'socket.io';
 import { ClientGrpc } from '@nestjs/microservices';
+import { SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
 import {
-  SubscribeMessage,
-  WebSocketGateway,
-  WebSocketServer,
-} from '@nestjs/websockets';
-import { NavigationService } from './service-definitions/navigation-service/navigation.service.interface';
+  NavigationService,
+  WatchResponse,
+} from './service-definitions/navigation-service/navigation.service.interface';
 import { Socket } from 'socket.io';
 import { lastValueFrom } from 'rxjs';
+import { Connection } from './interfaces/connections.interface';
 
 @WebSocketGateway({ cors: true })
 export class WebSocketController {
@@ -22,23 +21,25 @@ export class WebSocketController {
       this.grpcClient.getService<NavigationService>('NavigationService');
   }
 
-  @WebSocketServer()
-  private readonly server: Server;
+  private connections: Array<Connection> = [];
 
   async watchOrder(id: number) {
+    const connection = this.connections.find(
+      (connection) => connection.orderId === id,
+    );
+
     const rxResponse = this.navigationService.watchOrder({ id });
 
-    const server = this.server;
-
     rxResponse.subscribe({
-      next(msg) {
-        server.emit('watch.order', msg);
+      next(msg: WatchResponse) {
+        connection.clients.forEach((client) => {
+          client.socket.emit('watch.order', msg);
+        });
       },
       complete() {
-        server.emit('order.delivieried');
+        console.log('Соединение закрыто, заказ доставлен');
       },
       error(err) {
-        server.emit('watch.order', null);
         console.log('ОШИБОЧКА', err);
       },
     });
@@ -49,8 +50,40 @@ export class WebSocketController {
     console.log('connection id', client.id, id);
     client.on('disconnect', () => {
       console.log('disconnected', client.id, id);
-      this.connectionClose(id);
+      const connectionToClose = this.connections.find(
+        (connection) => connection.orderId === id,
+      );
+
+      if (!connectionToClose.clients.length) {
+        this.connections = this.connections.filter(
+          (connection) => connection.orderId !== id,
+        );
+        this.connectionClose(id);
+        return;
+      } else {
+        connectionToClose.clients = connectionToClose.clients.filter(
+          (clientItem) => {
+            return clientItem.clientId !== client.id;
+          },
+        );
+        return;
+      }
     });
+    const connectionCandidate = this.connections.find(
+      (connection) => connection.orderId === id,
+    );
+
+    if (connectionCandidate) {
+      connectionCandidate.clients.push({ clientId: client.id, socket: client });
+      this.watchOrder(id);
+      return;
+    }
+
+    this.connections.push({
+      orderId: id,
+      clients: [{ clientId: client.id, socket: client }],
+    });
+
     this.watchOrder(id);
   }
 

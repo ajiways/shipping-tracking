@@ -60,7 +60,6 @@ export class AppController {
   @MessagePattern(GET_COORDINATES)
   handleCoordinates(@Payload('value') data: OrderInterface) {
     const candidate = this.connections.get(data.id);
-    
 
     if (!candidate) {
       return;

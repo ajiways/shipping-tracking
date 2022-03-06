@@ -25,7 +25,7 @@ export interface WatchResponse {
 }
 
 export interface WatchRequest {
-  id: number;
+  id: number
 }
 
 export enum OrderStatus {
