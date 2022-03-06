@@ -29,7 +29,7 @@ export class WebSocketController {
     );
 
     const rxResponse = this.navigationService.watchOrder({ id });
-
+    console.log(`Открыл grpc stream для ордера ${id}`)
     rxResponse.subscribe({
       next(msg: WatchResponse) {
         connection.clients.forEach((client) => {
@@ -40,6 +40,9 @@ export class WebSocketController {
         console.log('Соединение закрыто, заказ доставлен');
       },
       error(err) {
+        connection.clients.forEach((client) => {
+          client.socket.emit('watch.order', null);
+        });
         console.log('ОШИБОЧКА', err);
       },
     });
@@ -54,18 +57,18 @@ export class WebSocketController {
         (connection) => connection.orderId === id,
       );
 
+      connectionToClose.clients = connectionToClose.clients.filter(
+        (clientItem) => {
+          return clientItem.clientId !== client.id;
+        },
+      );
+
       if (!connectionToClose.clients.length) {
         this.connections = this.connections.filter(
           (connection) => connection.orderId !== id,
         );
+        console.log(`Клиентов больше нет, закрываю grpc stream для ордера ${id}`)
         this.connectionClose(id);
-        return;
-      } else {
-        connectionToClose.clients = connectionToClose.clients.filter(
-          (clientItem) => {
-            return clientItem.clientId !== client.id;
-          },
-        );
         return;
       }
     });
